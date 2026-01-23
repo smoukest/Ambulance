@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Width="200" Height="300"
+        x:Class="Ambulance.Authorization"
+        CanResize="False"   
+        Background="#d1ffef"
+        Title="Authorization"
+        SystemDecorations="None">
+    <Grid>
+
+        <StackPanel HorizontalAlignment="Center" Margin="0,0,0,0">
+            <Grid Height="40" Width="200" Background="#32d1b4"  VerticalAlignment="Top" 
+          PointerPressed="OnHeaderPointerPressed">
+				<TextBlock Text="Авторизацая" FontSize="16" FontWeight="Bold" 
+                         Foreground="White" Margin="15,0,0,0" VerticalAlignment="Center"/>
+            </Grid>
+            <Button Width="40" Height="40" Content="×" FontSize="16" FontWeight="Bold"
+                Background="Transparent" Foreground="White" BorderThickness="0"
+                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-40,0,0"
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                Click="OnCloseClick"/>
+		    <TextBlock TextAlignment="Center" Margin="0,15">Логин</TextBlock>
+            <TextBox Margin="10,-10" Name="Login"></TextBox>
+            <TextBlock TextAlignment="Center" Margin="0,15">Пароль</TextBlock>
+            <TextBox Margin="10,-10" Name="Password"></TextBox>
+            <Button Width="40" Height="40" Content="×" FontSize="16" FontWeight="Bold"
+                Background="Transparent" Foreground="White" BorderThickness="0"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" 
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                Click="OnSubmit"/>
+        </StackPanel>
+    </Grid>
+</Window>

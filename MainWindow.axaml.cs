@@ -1,0 +1,73 @@
+using Ambulance.Views;
+using Avalonia.Controls;
+
+namespace Ambulance
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void OnRegistrationClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            // Сбрасываем стили всех кнопок
+            ResetButtonStyles();
+
+            // Устанавливаем стиль для активной кнопки
+            var registrationButton = this.FindControl<Button>("RegistrationButton");
+            registrationButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
+            registrationButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
+
+            // Меняем контент на представление регистрации
+            MainContent.Content = new RegistrationView();
+        }
+
+        private void OnRequestsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            // Сбрасываем стили всех кнопок
+            ResetButtonStyles();
+
+            // Устанавливаем стиль для активной кнопки
+            var requestsButton = this.FindControl<Button>("RequestsButton");
+            requestsButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
+            requestsButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
+
+            // Меняем контент на представление всех заявок
+            MainContent.Content = new AllRequestsView();
+        }
+
+        private void OnStatsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            // Сбрасываем стили всех кнопок
+            ResetButtonStyles();
+
+            // Устанавливаем стиль для активной кнопки
+            var statsButton = this.FindControl<Button>("StatsButton");
+            statsButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
+            statsButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
+
+            // Меняем контент на представление статистики
+            MainContent.Content = new StatisticsView();
+        }
+
+        private void ResetButtonStyles()
+        {
+            var registrationButton = this.FindControl<Button>("RegistrationButton");
+            var requestsButton = this.FindControl<Button>("RequestsButton");
+            var statsButton = this.FindControl<Button>("StatsButton");
+
+            registrationButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("Transparent"));
+            registrationButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
+
+            requestsButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("Transparent"));
+            requestsButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
+
+            statsButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("Transparent"));
+            statsButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
+        }
+        
+
+    }
+}

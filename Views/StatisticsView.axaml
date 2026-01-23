@@ -1,0 +1,155 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Ambulance.Views.StatisticsView">
+  <Border Margin="15">
+    <Grid Background="#121212">
+    <!-- Stat Cards -->
+    <Grid RowDefinitions="Auto,*,*,*" ColumnDefinitions="*,*,*,*">
+      <!-- Card 1 -->
+      <Border Grid.Row="0" Grid.Column="0" Background="#1E1E1E" CornerRadius="8" 
+              Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="Всего заявок" FontSize="14" Foreground="#BDBDBD"/>
+          <TextBlock Text="6" FontSize="24" FontWeight="Bold" Foreground="White"/>
+          <TextBlock Text="↑ +12% vs вчера" FontSize="12" Foreground="#4CAF50"/>
+        </StackPanel>
+      </Border>
+      <!-- Card 2 -->
+      <Border Grid.Row="0" Grid.Column="1" Background="#1E1E1E" CornerRadius="8" 
+              Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="Завершено сегодня" FontSize="14" Foreground="#BDBDBD"/>
+          <TextBlock Text="1" FontSize="24" FontWeight="Bold" Foreground="White"/>
+          <TextBlock Text="↑ +5% vs вчера" FontSize="12" Foreground="#4CAF50"/>
+        </StackPanel>
+      </Border>
+      <!-- Card 3 -->
+      <Border Grid.Row="0" Grid.Column="2" Background="#1E1E1E" CornerRadius="8" 
+              Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="В работе" FontSize="14" Foreground="#BDBDBD"/>
+          <TextBlock Text="2" FontSize="24" FontWeight="Bold" Foreground="White"/>
+          <TextBlock Text="↑ 2 бригады vs вчера" FontSize="12" Foreground="#4CAF50"/>
+        </StackPanel>
+      </Border>
+      <!-- Card 4 -->
+      <Border Grid.Row="0" Grid.Column="3" Background="#1E1E1E" CornerRadius="8" 
+              Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="Критические" FontSize="14" Foreground="#BDBDBD"/>
+          <TextBlock Text="2" FontSize="24" FontWeight="Bold" Foreground="White"/>
+          <TextBlock Text="↓ -5% vs вчера" FontSize="12" Foreground="#F44336"/>
+        </StackPanel>
+      </Border>
+
+      <!-- Charts -->
+      <Border Grid.Row="1" Grid.ColumnSpan="2" Background="#1E1E1E" CornerRadius="8" 
+              Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="Заявки по часам (сегодня)" FontSize="16" FontWeight="Bold" 
+                     Foreground="White" Margin="0,0,0,10"/>
+          <!-- Line Chart Mock -->
+          <Canvas Height="200">
+            <Path Data="M0,180 L20,150 L40,120 L60,90 L80,60 L100,30 L120,50 L140,80 L160,110 L180,140 L200,170" 
+                  Stroke="#FF5252" StrokeThickness="2"/>
+          </Canvas>
+        </StackPanel>
+      </Border>
+      <Border Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Background="#1E1E1E" 
+              CornerRadius="8" Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="Статистика за неделю" FontSize="16" FontWeight="Bold" 
+                     Foreground="White" Margin="0,0,0,10"/>
+          <!-- Bar Chart Mock -->
+          <Grid Height="200">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Column="0" Height="120" Fill="#FF5252" VerticalAlignment="Bottom"/>
+            <Rectangle Grid.Column="1" Height="90" Fill="#4CAF50" VerticalAlignment="Bottom"/>
+            <Rectangle Grid.Column="2" Height="130" Fill="#FF5252" VerticalAlignment="Bottom"/>
+            <Rectangle Grid.Column="3" Height="100" Fill="#4CAF50" VerticalAlignment="Bottom"/>
+            <Rectangle Grid.Column="4" Height="70" Fill="#FF5252" VerticalAlignment="Bottom"/>
+            <Rectangle Grid.Column="5" Height="150" Fill="#FF5252" VerticalAlignment="Bottom"/>
+            <Rectangle Grid.Column="6" Height="140" Fill="#4CAF50" VerticalAlignment="Bottom"/>
+            <Rectangle Grid.Column="7" Height="110" Fill="#FF5252" VerticalAlignment="Bottom"/>
+            <Rectangle Grid.Column="8" Height="80" Fill="#4CAF50" VerticalAlignment="Bottom"/>
+          </Grid>
+          <StackPanel Orientation="Horizontal" Margin="10,5">
+            <Rectangle Width="15" Height="15" Fill="#FF5252" Margin="0,0,5,0"/>
+            <TextBlock Text="заявки" Foreground="White" FontSize="12"/>
+            <Rectangle Width="15" Height="15" Fill="#4CAF50" Margin="10,0,5,0"/>
+            <TextBlock Text="завершено" Foreground="White" FontSize="12"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- Pie Charts & Brigades -->
+      <Border Grid.Row="2" Grid.Column="0" Background="#1E1E1E" CornerRadius="8" 
+              Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="По статусу" FontSize="16" FontWeight="Bold" Foreground="White" 
+                     Margin="0,0,0,10"/>
+          <!-- Pie Chart Mock -->
+          <Grid Width="150" Height="150" Margin="0,10">
+            <Ellipse Fill="#2196F3"/>
+            <Ellipse Fill="#FF9800" Margin="0,0,0,75"/>
+            <Ellipse Fill="#4CAF50" Margin="0,75,75,0"/>
+            <Ellipse Fill="#9E9E9E" Margin="75,75,0,0"/>
+          </Grid>
+          <StackPanel Orientation="Horizontal" Margin="5">
+            <Rectangle Width="15" Height="15" Fill="#2196F3" Margin="0,0,5,0"/>
+            <TextBlock Text="Новые: 2" Foreground="White" FontSize="12"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+      <Border Grid.Row="2" Grid.Column="1" Background="#1E1E1E" CornerRadius="8" 
+              Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="По приоритету" FontSize="16" FontWeight="Bold" Foreground="White" 
+                     Margin="0,0,0,10"/>
+          <!-- Pie Chart Mock -->
+          <Grid Width="150" Height="150" Margin="0,10">
+            <Ellipse Fill="#F44336"/>
+            <Ellipse Fill="#FF9800" Margin="0,0,0,75"/>
+            <Ellipse Fill="#9E9E9E" Margin="75,75,0,0"/>
+          </Grid>
+          <StackPanel Orientation="Horizontal" Margin="5">
+            <Rectangle Width="15" Height="15" Fill="#F44336" Margin="0,0,5,0"/>
+            <TextBlock Text="Критический: 2" Foreground="White" FontSize="12"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+      <Border Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Background="#1E1E1E" 
+              CornerRadius="8" Padding="15" Margin="5">
+        <StackPanel>
+          <TextBlock Text="Бригады" FontSize="16" FontWeight="Bold" Foreground="White" 
+                     Margin="0,0,0,10"/>
+          <StackPanel Margin="0,10">
+            <Border Background="#262626" CornerRadius="4" Padding="10" Margin="5">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Бригада №1" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="12" Foreground="#BDBDBD" Margin="10,0,0,0"/>
+              </StackPanel>
+            </Border>
+            <Border Background="#262626" CornerRadius="4" Padding="10" Margin="5">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Бригада №3" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="15" Foreground="#BDBDBD" Margin="10,0,0,0"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+      </Border>
+</UserControl>
