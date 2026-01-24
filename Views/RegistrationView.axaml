@@ -1,76 +1,75 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Ambulance.Views.RegistrationView">
-   <Border Margin="15">
-    <Grid Background="#121212">
+   
+    <Grid Background="#32d1b4">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
 
         <!-- Registration Form -->
-        <Border Grid.Column="0" Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="5">
+        <Border Grid.Column="0" Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5">
           <StackPanel>
             <TextBlock Text="Регистрация новой заявки" FontSize="20" FontWeight="Bold" 
-                       Foreground="White" Margin="0,0,0,20"/>
+                       Foreground="Black" Margin="0,0,0,20"/>
         
             <Grid Margin="0,10" ColumnDefinitions="*,*">
-              <TextBox Grid.Column="0" Watermark="Номер телефона" Text="+7 (___) ___-__-__" 
-                       Background="#262626" Foreground="White" BorderBrush="#333" Height="40" 
+              <TextBox Grid.Column="0" Watermark="Номер телефона" 
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
                        Margin="0,0,10,0"/>
-              <TextBox Grid.Column="1" Watermark="Электронная почта" Text="email@example.com" 
-                       Background="#262626" Foreground="White" BorderBrush="#333" Height="40"/>
+              <TextBox Grid.Column="1" Watermark="Электронная почта"
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40"/>
             </Grid>
         
             <Grid Margin="0,10" ColumnDefinitions="*,*,*">
-              <TextBox Grid.Column="0" Watermark="Фамилия" Text="Иванов" 
-                       Background="#262626" Foreground="White" BorderBrush="#333" Height="40" 
+              <TextBox Grid.Column="0" Watermark="Фамилия" 
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
                        Margin="0,0,5,0"/>
-              <TextBox Grid.Column="1" Watermark="Имя" Text="Иван" 
-                       Background="#262626" Foreground="White" BorderBrush="#333" Height="40" 
+              <TextBox Grid.Column="1" Watermark="Имя"
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
                        Margin="0,0,5,0"/>
-              <TextBox Grid.Column="2" Watermark="Отчество" Text="Иванович" 
-                       Background="#262626" Foreground="White" BorderBrush="#333" Height="40"/>
+              <TextBox Grid.Column="2" Watermark="Отчество"
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40"/>
             </Grid>
         
-            <TextBox Watermark="Адрес проживания" Text="Город, улица, дом, квартира" 
-                     Background="#262626" Foreground="White" BorderBrush="#333" Height="40" 
+            <TextBox Watermark="Адрес проживания" 
+                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
                      Margin="0,10,0,0"/>
         
             <TextBox Watermark="Анамнез" 
-                     Text="Хронические заболевания, аллергии, принимаемые препараты..." 
-                     Background="#262626" Foreground="White" BorderBrush="#333" Height="100" 
+                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="100" 
                      Margin="0,10,0,0" TextWrapping="Wrap"/>
         
             <TextBox Watermark="Жалобы" 
-                     Text="Опишите симптомы и жалобы пациента..." 
-                     Background="#262626" Foreground="White" BorderBrush="#333" Height="100" 
+                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="100" 
                      Margin="0,10,0,0" TextWrapping="Wrap"/>
+            <Grid Margin="0,10,0,0" ColumnDefinitions="*,*">
+                <ComboBox Grid.Column="0" Background="#ecfff8" Foreground="Black" Height="40" 
+                          PlaceholderText="Приоритет" Margin="0,0,10,0"/>
         
-            <ComboBox Background="#262626" Foreground="White" Height="40" Margin="0,10,0,0" 
-                      PlaceholderText="Приоритет"/>
-        
-            <Button Content="Зарегистрировать заявку" Background="#FF5252" Foreground="White" 
-                    Height="40" Margin="0,20,0,0" FontWeight="Bold"/>
-            <Button Content="Очистить" Background="#262626" Foreground="White" 
-                    Height="40" Margin="0,10,0,0"/>
+                <Button Grid.Column="1" Content="Зарегистрировать заявку" Background="LightGreen" Foreground="Black" 
+                        Height="40" FontWeight="Bold" BorderBrush="Black" HorizontalAlignment="Right"/>
+            </Grid>
+            <Button Content="Очистить" Background="#FF5252" Foreground="Black" HorizontalAlignment="Right"
+                    Height="40" Margin="0,50,0,0" BorderBrush="Black" FontWeight="Bold"/>
           </StackPanel>
         </Border>
 
         <!-- Recent Requests -->
-        <Border Grid.Column="1" Background="#1E1E1E" CornerRadius="8" Padding="20" Margin="5">
+        <Border Grid.Column="1" Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5">
           <StackPanel>
             <TextBlock Text="Последние заявки" FontSize="18" FontWeight="Bold" 
-                       Foreground="White" Margin="0,0,0,20"/>
+                       Foreground="Black" Margin="0,0,0,20"/>
         
-            <Border Background="#262626" CornerRadius="4" Padding="10" Margin="0,0,0,10">
+            <Border Background="#ecfff8" CornerRadius="4" Padding="10" Margin="0,0,0,10">
               <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                  <TextBlock Text="REQ-006" FontWeight="Bold" Foreground="#FF5252"/>
-                  <TextBlock Text="Средний" Background="#FF9800" Foreground="White" 
+                  <TextBlock Text="REQ-006" FontWeight="Bold" />
+                  <TextBlock Text="Средний" Background="#FF9800" Foreground="Black" 
                              Padding="5,2" Margin="10,0"/>
                 </StackPanel>
-                <TextBlock Text="Морозова Ольга Петровна" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Морозова Ольга Петровна" FontWeight="Bold" Foreground="Black"/>
                 <TextBlock Text="Боль в животе, тошнота" Foreground="#BDBDBD" FontSize="12"/>
                 <TextBlock Text="г. Москва, ул. Новый Арбат, д. 30..." 
                            Foreground="#BDBDBD" FontSize="12" Margin="0,5,0,0"/>
@@ -80,14 +79,14 @@
               </StackPanel>
             </Border>
         
-            <Border Background="#262626" CornerRadius="4" Padding="10" Margin="0,0,0,10">
+            <Border Background="#ecfff8" CornerRadius="4" Padding="10" Margin="0,0,0,10" >
               <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                  <TextBlock Text="REQ-003" FontWeight="Bold" Foreground="#FF5252"/>
-                  <TextBlock Text="Средний" Background="#FF9800" Foreground="White" 
+                  <TextBlock Text="REQ-003" FontWeight="Bold"/>
+                  <TextBlock Text="Средний" Background="#FF9800" Foreground="Black" 
                              Padding="5,2" Margin="10,0"/>
                 </StackPanel>
-                <TextBlock Text="Козлов Алексей Викторович" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Козлов Алексей Викторович" FontWeight="Bold" Foreground="Black"/>
                 <TextBlock Text="Травма ноги после падения, отек" 
                            Foreground="#BDBDBD" FontSize="12"/>
                 <TextBlock Text="г. Москва, ул. Тверская, д. 25, кв. 8" 
@@ -100,5 +99,4 @@
           </StackPanel>
         </Border>
       </Grid>
-    </Border>
 </UserControl>

@@ -2,25 +2,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:Ambulance.Views"
         x:Class="Ambulance.MainWindow"
-
+        Background="#d1ffef"
         Width="1200" Height="800"
         Title="Диспетчер">
+    
     <Grid>
-        
-        <Grid>
-    <!-- Navigation Bar -->
-            <Grid Height="70" Background="#1E1E1E" VerticalAlignment="Top">
-              <StackPanel Orientation="Horizontal" Margin="10">
-                <Button x:Name="RegistrationButton" Content="Регистрация" Click="OnRegistrationClick" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
-                <Button x:Name="RequestsButton" Content="Все заявки" Click="OnRequestsClick" Background="#E53935" Foreground="White" BorderThickness="0" Padding="10"/>
-                <Button x:Name="StatsButton" Content="Статистика" Click="OnStatsClick" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
-              </StackPanel>
-            </Grid>
-
-    <!-- Content Area -->
-            <ContentControl Name="MainContent" Margin="0,70,0,0">
-              <views:RegistrationView/> <!-- Стартовый экран -->
-            </ContentControl>
+<!-- Navigation Bar -->
+        <Grid Height="70" Background="#32d1b4" VerticalAlignment="Top">
+            <StackPanel Orientation="Horizontal" Margin="10">
+            <Button x:Name="RegistrationButton" Content="Регистрация" Click="OnRegistrationClick" Background="#E53935" Foreground="White" BorderThickness="0" Padding="10"/>
+            <Button x:Name="RequestsButton" Content="Все заявки" Click="OnRequestsClick" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
+            <Button x:Name="StatsButton" Content="Статистика" Click="OnStatsClick" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
+            </StackPanel>
         </Grid>
+
+<!-- Content Area -->
+        <ContentControl Name="MainContent" Margin="0,70,0,0">
+            <views:RegistrationView/> <!-- Стартовый экран -->
+        </ContentControl>
     </Grid>
 </Window>

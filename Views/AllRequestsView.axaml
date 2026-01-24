@@ -4,8 +4,7 @@
               Width="1200" Height="800">
 
   <Grid Background="#121212">
-    <!-- Top Bar -->
-    <Grid Height="50" Background="#1E1E1E" Margin="0,0,0,20">
+    <Grid Height="50" Background="#32d1b4" Margin="0,0,0,20" VerticalAlignment="Top">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>

@@ -2,12 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Width="200" Height="300"
+        Width="200" Height="230"
         x:Class="Ambulance.Authorization"
         CanResize="False"   
         Background="#d1ffef"
         Title="Authorization"
-        SystemDecorations="None">
+        SystemDecorations="None"
+        WindowStartupLocation="CenterScreen">
     <Grid>
 
         <StackPanel HorizontalAlignment="Center" Margin="0,0,0,0">
@@ -25,11 +26,14 @@
             <TextBox Margin="10,-10" Name="Login"></TextBox>
             <TextBlock TextAlignment="Center" Margin="0,15">Пароль</TextBlock>
             <TextBox Margin="10,-10" Name="Password"></TextBox>
-            <Button Width="40" Height="40" Content="×" FontSize="16" FontWeight="Bold"
-                Background="Transparent" Foreground="White" BorderThickness="0"
-                HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" 
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                Click="OnSubmit"/>
+            
+            <Button Height="40" Content="Войти" FontSize="16" FontWeight="Bold"
+            Background="#ecfff8" Foreground="Black" BorderBrush="Black"
+            HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0" 
+            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+            Click="OnSubmit"/>
+            
+            
         </StackPanel>
     </Grid>
 </Window>
