@@ -8,7 +8,6 @@ namespace Ambulance
 {
     public partial class App : Application
     {
-        private DatabaseService _dt;
         private ClientSocket _clientSocket;
         public override void Initialize()
         {

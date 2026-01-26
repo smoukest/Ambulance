@@ -12,47 +12,51 @@
         <Border Grid.Column="0" Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5">
           <StackPanel>
             <TextBlock Text="Регистрация новой заявки" FontSize="20" FontWeight="Bold" 
-                       Foreground="Black" Margin="0,0,0,20"/>
+                       Foreground="Black" Margin="0,0,0,20" />
         
             <Grid Margin="0,10" ColumnDefinitions="*,*">
               <TextBox Grid.Column="0" Watermark="Номер телефона" 
                        Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
-                       Margin="0,0,10,0"/>
+                       Margin="0,0,10,0" Name="PhoneNumber"/>
               <TextBox Grid.Column="1" Watermark="Электронная почта"
-                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40"/>
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" Name="Email"/>
             </Grid>
         
             <Grid Margin="0,10" ColumnDefinitions="*,*,*">
               <TextBox Grid.Column="0" Watermark="Фамилия" 
                        Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
-                       Margin="0,0,5,0"/>
+                       Margin="0,0,5,0" Name="Surname"/>
               <TextBox Grid.Column="1" Watermark="Имя"
                        Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
-                       Margin="0,0,5,0"/>
-              <TextBox Grid.Column="2" Watermark="Отчество"
+                       Margin="0,0,5,0" Name="Name"/>
+              <TextBox Grid.Column="2" Watermark="Отчество" Name="Patronymic"
                        Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40"/>
             </Grid>
         
             <TextBox Watermark="Адрес проживания" 
                      Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
-                     Margin="0,10,0,0"/>
+                     Margin="0,10,0,0" Name="Address"/>
         
             <TextBox Watermark="Анамнез" 
                      Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="100" 
-                     Margin="0,10,0,0" TextWrapping="Wrap"/>
+                     Margin="0,10,0,0" TextWrapping="Wrap" Name="Anamnesis"/>
         
             <TextBox Watermark="Жалобы" 
                      Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="100" 
-                     Margin="0,10,0,0" TextWrapping="Wrap"/>
+                     Margin="0,10,0,0" TextWrapping="Wrap" Name="Complaints"/>
             <Grid Margin="0,10,0,0" ColumnDefinitions="*,*">
                 <ComboBox Grid.Column="0" Background="#ecfff8" Foreground="Black" Height="40" 
-                          PlaceholderText="Приоритет" Margin="0,0,10,0"/>
+                          PlaceholderText="Цель обращения" Name="Status" Margin="0,0,10,0">
+                    <ComboBoxItem Content="Консультация" IsSelected="True"/>
+                    <ComboBoxItem Content="Выезд"/>
+                    <ComboBoxItem Content="Другая"/>
+                </ComboBox>
         
-                <Button Grid.Column="1" Content="Зарегистрировать заявку" Background="LightGreen" Foreground="Black" 
-                        Height="40" FontWeight="Bold" BorderBrush="Black" HorizontalAlignment="Right"/>
+                <Button Grid.Column="1" Content="Зарегистрировать заявку" Background="#4CAF50" Foreground="Black" 
+                        Height="40" FontWeight="Bold" BorderBrush="Black" HorizontalAlignment="Right" Click="Registration_Click"/>
             </Grid>
             <Button Content="Очистить" Background="#FF5252" Foreground="Black" HorizontalAlignment="Right"
-                    Height="40" Margin="0,50,0,0" BorderBrush="Black" FontWeight="Bold"/>
+                    Height="40" Margin="0,50,0,0" BorderBrush="Black" FontWeight="Bold" Click="Clear_Click"/>
           </StackPanel>
         </Border>
 

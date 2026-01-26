@@ -1,177 +1,202 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Ambulance.Views.AllRequestsView"
-              Width="1200" Height="800">
+             x:Class="Ambulance.Views.AllRequestsView">
 
-  <Grid Background="#121212">
-    <Grid Height="50" Background="#32d1b4" Margin="0,0,0,20" VerticalAlignment="Top">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      <TextBlock Text="Все заявки" FontSize="16" FontWeight="Bold" Foreground="White" Margin="15,0,0,0"/>
-      <TextBlock Text="6 из 6" FontSize="12" Foreground="#BDBDBD" Margin="0,0,15,0" HorizontalAlignment="Right"/>
-    </Grid>
-
-    <!-- Search & Filters -->
-    <Grid Margin="15,60,15,0">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="Auto"/>
-      </Grid.ColumnDefinitions>
-      <TextBox Watermark="Поиск по ФИО, номеру, адресу, телефону..." 
-               Background="#1E1E1E" Foreground="White" BorderBrush="#333" Height="40"/>
-      <Button Grid.Column="1" Content="🔍" FontFamily="Segoe UI" Background="#1E1E1E" 
-              Foreground="White" Width="40" Height="40" Margin="10,0,0,0"/>
-      <ComboBox Grid.Column="2" Background="#1E1E1E" Foreground="White" Height="40" Width="120" 
-                Margin="10,0,0,0">
-        <ComboBoxItem Content="Все статусы" IsSelected="True"/>
-      </ComboBox>
-      <ComboBox Grid.Column="3" Background="#1E1E1E" Foreground="White" Height="40" Width="120" 
-                Margin="10,0,0,0">
-        <ComboBoxItem Content="Все приоритеты" IsSelected="True"/>
-      </ComboBox>
-    </Grid>
-
-    <!-- Static Table instead of DataGrid -->
-    <ScrollViewer Margin="15,110,15,15">
+  <Grid Background="#32d1b4">
+    <Border Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5">
       <Grid>
-        <!-- Table Headers -->
-        <Grid Background="#262626" Margin="0,0,0,5">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="80"/>
-          </Grid.ColumnDefinitions>
-          
-          <TextBlock Text="№ Заявки" Foreground="#BDBDBD" FontWeight="Bold" Margin="10,5"/>
-          <TextBlock Grid.Column="1" Text="Пациент" Foreground="#BDBDBD" FontWeight="Bold" Margin="10,5"/>
-          <TextBlock Grid.Column="2" Text="Телефон" Foreground="#BDBDBD" FontWeight="Bold" Margin="10,5"/>
-          <TextBlock Grid.Column="3" Text="Приоритет" Foreground="#BDBDBD" FontWeight="Bold" Margin="10,5"/>
-          <TextBlock Grid.Column="4" Text="Статус" Foreground="#BDBDBD" FontWeight="Bold" Margin="10,5"/>
-          <TextBlock Grid.Column="5" Text="Время" Foreground="#BDBDBD" FontWeight="Bold" Margin="10,5"/>
-          <TextBlock Grid.Column="6" Text="Бригада" Foreground="#BDBDBD" FontWeight="Bold" Margin="10,5"/>
-          <TextBlock Grid.Column="7" Text="Действия" Foreground="#BDBDBD" FontWeight="Bold" Margin="10,5"/>
-        </Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         
-        <!-- Row 1 -->
-        <Grid Background="#1E1E1E" Margin="0,35,0,5">
+        <Grid Height="50" Margin="0,0,0,15">
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
-          
-          <TextBlock Text="REQ-006" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
-          
-          <StackPanel Grid.Column="1" Margin="10,5">
-            <TextBlock Text="Морозова О. П." FontWeight="Bold" Foreground="White"/>
-            <TextBlock Text="г. Москва, ул. Новый Арбат, д. 30, кв. 5" FontSize="12" Foreground="#BDBDBD"/>
-          </StackPanel>
-          
-          <TextBlock Grid.Column="2" Text="+7 (495) 666-77-88" Foreground="White" Margin="10,5"/>
-          
-          <Border Grid.Column="3" Background="#FF9800" CornerRadius="4" Padding="5,2" Margin="10,5">
-            <TextBlock Text="Средний" Foreground="White" TextAlignment="Center" FontSize="12"/>
-          </Border>
-          
-          <Border Grid.Column="4" Background="#2196F3" CornerRadius="4" Padding="5,2" Margin="10,5">
-            <TextBlock Text="Новая" Foreground="White" TextAlignment="Center" FontSize="12"/>
-          </Border>
-          
-          <TextBlock Grid.Column="5" Text="10:46 21.01" Foreground="White" Margin="10,5"/>
-          <TextBlock Grid.Column="6" Text="—" Foreground="White" Margin="10,5"/>
-          
-          <Button Grid.Column="7" Content="⋮" FontFamily="Segoe UI" Background="Transparent" 
-                  Foreground="White" BorderBrush="Transparent" Margin="10,5"/>
+          <TextBlock Text="Все заявки" FontSize="18" FontWeight="Bold" Foreground="Black"/>
+          <TextBlock Grid.Column="1" Text="6 из 6" FontSize="12" Foreground="#666" HorizontalAlignment="Right"/>
         </Grid>
-        
-        <!-- Row 2 -->
-        <Grid Background="#1E1E1E" Margin="0,75,0,5">
+
+        <!-- Search & Filters -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          
-          <TextBlock Text="REQ-003" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
-          
-          <StackPanel Grid.Column="1" Margin="10,5">
-            <TextBlock Text="Козлов А. В." FontWeight="Bold" Foreground="White"/>
-            <TextBlock Text="г. Москва, ул. Тверская, д. 25, кв. 8" FontSize="12" Foreground="#BDBDBD"/>
-          </StackPanel>
-          
-          <TextBlock Grid.Column="2" Text="+7 (495) 777-88-99" Foreground="White" Margin="10,5"/>
-          
-          <Border Grid.Column="3" Background="#F44336" CornerRadius="4" Padding="5,2" Margin="10,5">
-            <TextBlock Text="Критический" Foreground="White" TextAlignment="Center" FontSize="12"/>
-          </Border>
-          
-          <Border Grid.Column="4" Background="#FF9800" CornerRadius="4" Padding="5,2" Margin="10,5">
-            <TextBlock Text="В работе" Foreground="White" TextAlignment="Center" FontSize="12"/>
-          </Border>
-          
-          <TextBlock Grid.Column="5" Text="10:42 21.01" Foreground="White" Margin="10,5"/>
-          <TextBlock Grid.Column="6" Text="Бригада №1" Foreground="White" Margin="10,5"/>
-          
-          <Button Grid.Column="7" Content="⋮" FontFamily="Segoe UI" Background="Transparent" 
-                  Foreground="White" BorderBrush="Transparent" Margin="10,5"/>
+          <TextBox Watermark="Поиск по ФИО, номеру, адресу, телефону..." 
+                   Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40"/>
+          <Button Grid.Column="1" Content="🔍" FontFamily="Segoe UI" Background="#ecfff8" 
+                  Foreground="Black" Width="40" Height="40" Margin="10,0,0,0" BorderBrush="#333"/>
+          <ComboBox Grid.Column="2" Background="#ecfff8" Foreground="Black" Height="40" Width="120" 
+                    Margin="10,0,0,0" BorderBrush="#333">
+            <ComboBoxItem Content="Все статусы" IsSelected="True"/>
+          </ComboBox>
+          <ComboBox Grid.Column="3" Background="#ecfff8" Foreground="Black" Height="40" Width="120" 
+                    Margin="10,0,0,0" BorderBrush="#333">
+            <ComboBoxItem Content="Все приоритеты" IsSelected="True"/>
+          </ComboBox>
         </Grid>
-        
-        <!-- Row 3 -->
-        <Grid Background="#1E1E1E" Margin="0,115,0,5">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="80"/>
-          </Grid.ColumnDefinitions>
-          
-          <TextBlock Text="REQ-002" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
-          
-          <StackPanel Grid.Column="1" Margin="10,5">
-            <TextBlock Text="Петров С. И." FontWeight="Bold" Foreground="White"/>
-            <TextBlock Text="г. Москва, ул. Ленина, д. 15, кв. 42" FontSize="12" Foreground="#BDBDBD"/>
-          </StackPanel>
-          
-          <TextBlock Grid.Column="2" Text="+7 (495) 555-66-77" Foreground="White" Margin="10,5"/>
-          
-          <Border Grid.Column="3" Background="#4CAF50" CornerRadius="4" Padding="5,2" Margin="10,5">
-            <TextBlock Text="Низкий" Foreground="White" TextAlignment="Center" FontSize="12"/>
-          </Border>
-          
-          <Border Grid.Column="4" Background="#4CAF50" CornerRadius="4" Padding="5,2" Margin="10,5">
-            <TextBlock Text="Завершена" Foreground="White" TextAlignment="Center" FontSize="12"/>
-          </Border>
-          
-          <TextBlock Grid.Column="5" Text="09:30 21.01" Foreground="White" Margin="10,5"/>
-          <TextBlock Grid.Column="6" Text="Бригада №3" Foreground="White" Margin="10,5"/>
-          
-          <Button Grid.Column="7" Content="⋮" FontFamily="Segoe UI" Background="Transparent" 
-                  Foreground="White" BorderBrush="Transparent" Margin="10,5"/>
-        </Grid>
+
+        <!-- Table -->
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto">
+          <Grid>
+            <!-- Table Headers -->
+            <Border CornerRadius="4">
+              <Grid Background="#ecfff8" Margin="0,0,0,5" >
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="100"/>
+                  <ColumnDefinition Width="2*"/>
+                  <ColumnDefinition Width="150"/>
+                  <ColumnDefinition Width="100"/>
+                  <ColumnDefinition Width="100"/>
+                  <ColumnDefinition Width="100"/>
+                  <ColumnDefinition Width="100"/>
+                  <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="№ Заявки" FontWeight="Bold" Margin="10,5"/>
+                <TextBlock Grid.Column="1" Text="Пациент" FontWeight="Bold" Margin="10,5"/>
+                <TextBlock Grid.Column="2" Text="Телефон" FontWeight="Bold" Margin="10,5"/>
+                <TextBlock Grid.Column="3" Text="Приоритет" FontWeight="Bold" Margin="10,5"/>
+                <TextBlock Grid.Column="4" Text="Статус" FontWeight="Bold" Margin="10,5"/>
+                <TextBlock Grid.Column="5" Text="Время" FontWeight="Bold" Margin="10,5"/>
+                <TextBlock Grid.Column="6" Text="Бригада" FontWeight="Bold" Margin="10,5"/>
+                <TextBlock Grid.Column="7" Text="Действия" FontWeight="Bold" Margin="10,5"/>
+              </Grid>
+            </Border>
+            
+            <!-- Table Rows -->
+            <Grid Grid.Row="1" Margin="0,30,0,0">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              
+              <!-- Row 1 -->
+              <Border Grid.Row="0" Background="#ecfff8" Margin="0,5,0,5" CornerRadius="4">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="80"/>
+                  </Grid.ColumnDefinitions>
+                  
+                  <TextBlock Text="REQ-006" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
+                  
+                  <StackPanel Grid.Column="1" Margin="10,5">
+                    <TextBlock Text="Морозова О. П." FontWeight="Bold" Foreground="Black"/>
+                    <TextBlock Text="г. Москва, ул. Новый Арбат, д. 30, кв. 5" FontSize="12" Foreground="#666"/>
+                  </StackPanel>
+                  
+                  <TextBlock Grid.Column="2" Text="+7 (495) 666-77-88" Foreground="Black" Margin="10,5"/>
+                  
+                  <Border Grid.Column="3" Background="#FF9800" CornerRadius="4" Padding="5,2" Margin="10,5">
+                    <TextBlock Text="Средний" Foreground="White" TextAlignment="Center" FontSize="12"/>
+                  </Border>
+                  
+                  <Border Grid.Column="4" Background="#2196F3" CornerRadius="4" Padding="5,2" Margin="10,5">
+                    <TextBlock Text="Новая" Foreground="White" TextAlignment="Center" FontSize="12"/>
+                  </Border>
+                  
+                  <TextBlock Grid.Column="5" Text="10:46 21.01" Foreground="Black" Margin="10,5"/>
+                  <TextBlock Grid.Column="6" Text="—" Foreground="#666" Margin="10,5"/>
+                  
+                  <Button Grid.Column="7" Content="⋮" FontFamily="Segoe UI" Background="Transparent" 
+                          Foreground="Black" BorderBrush="Transparent" Margin="10,5"/>
+                </Grid>
+              </Border>
+              
+              <!-- Row 2 -->
+              <Border Grid.Row="1" Background="#ecfff8" Margin="0,5,0,5" CornerRadius="4">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="80"/>
+                  </Grid.ColumnDefinitions>
+                  
+                  <TextBlock Text="REQ-003" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
+                  
+                  <StackPanel Grid.Column="1" Margin="10,5">
+                    <TextBlock Text="Козлов А. В." FontWeight="Bold" Foreground="Black"/>
+                    <TextBlock Text="г. Москва, ул. Тверская, д. 25, кв. 8" FontSize="12" Foreground="#666"/>
+                  </StackPanel>
+                  
+                  <TextBlock Grid.Column="2" Text="+7 (495) 777-88-99" Foreground="Black" Margin="10,5"/>
+                  
+                  <Border Grid.Column="3" Background="#F44336" CornerRadius="4" Padding="5,2" Margin="10,5">
+                    <TextBlock Text="Критический" Foreground="White" TextAlignment="Center" FontSize="12"/>
+                  </Border>
+                  
+                  <Border Grid.Column="4" Background="#FF9800" CornerRadius="4" Padding="5,2" Margin="10,5">
+                    <TextBlock Text="В работе" Foreground="White" TextAlignment="Center" FontSize="12"/>
+                  </Border>
+                  
+                  <TextBlock Grid.Column="5" Text="10:42 21.01" Foreground="Black" Margin="10,5"/>
+                  <TextBlock Grid.Column="6" Text="Бригада №1" Foreground="Black" Margin="10,5"/>
+                  
+                  <Button Grid.Column="7" Content="⋮" FontFamily="Segoe UI" Background="Transparent" 
+                          Foreground="Black" BorderBrush="Transparent" Margin="10,5"/>
+                </Grid>
+              </Border>
+              
+              <!-- Row 3 -->
+              <Border Grid.Row="2" Background="#ecfff8" Margin="0,5,0,5" CornerRadius="4">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="80"/>
+                  </Grid.ColumnDefinitions>
+                  
+                  <TextBlock Text="REQ-002" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
+                  
+                  <StackPanel Grid.Column="1" Margin="10,5">
+                    <TextBlock Text="Петров С. И." FontWeight="Bold" Foreground="Black"/>
+                    <TextBlock Text="г. Москва, ул. Ленина, д. 15, кв. 42" FontSize="12" Foreground="#666"/>
+                  </StackPanel>
+                  
+                  <TextBlock Grid.Column="2" Text="+7 (495) 555-66-77" Foreground="Black" Margin="10,5"/>
+                  
+                  <Border Grid.Column="3" Background="#4CAF50" CornerRadius="4" Padding="5,2" Margin="10,5">
+                    <TextBlock Text="Низкий" Foreground="White" TextAlignment="Center" FontSize="12"/>
+                  </Border>
+                  
+                  <Border Grid.Column="4" Background="#4CAF50" CornerRadius="4" Padding="5,2" Margin="10,5">
+                    <TextBlock Text="Завершена" Foreground="White" TextAlignment="Center" FontSize="12"/>
+                  </Border>
+                  
+                  <TextBlock Grid.Column="5" Text="09:30 21.01" Foreground="Black" Margin="10,5"/>
+                  <TextBlock Grid.Column="6" Text="Бригада №3" Foreground="Black" Margin="10,5"/>
+                  
+                  <Button Grid.Column="7" Content="⋮" FontFamily="Segoe UI" Background="Transparent" 
+                          Foreground="Black" BorderBrush="Transparent" Margin="10,5"/>
+                </Grid>
+              </Border>
+            </Grid>
+          </Grid>
+        </ScrollViewer>
       </Grid>
-    </ScrollViewer>
+    </Border>
   </Grid>
 </UserControl>

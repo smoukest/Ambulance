@@ -94,43 +94,19 @@ namespace Ambulance
             }
             return names;
         }
-        public int[] CreateClient(string name, string surname, string patronymic,
-                                 int passportSeries, int passportNumber,
-                                 string phoneNumber, string requiredDate,
-                                 string requiredTime,
-                                 string restriction, bool baggage,
-                                 string nameLineOld, string nameStationOld,
-                                 string nameLineNew, string nameStationNew,
-                                 int infoMetro, int infoTaxi,
-                                 string destinationPlace)
+        public void CreateClient(string name, string surname, string patronymic,
+                                 string phoneNumber, string address,
+                                 string email, string anamnesis,
+                                 string complaints, string status)
         {
             int[] info = new int[2];
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
-                int idLineNew, idStationNew, idLineOld, idStationOld;
 
-                using (var oldDB = new NpgsqlCommand($"select s.id_line, s.id_station FROM stations s, lines l" +
-                    $" WHERE l.name='{nameLineOld}' AND s.name='{nameStationOld}' AND s.id_line=l.id_line", connection))
-                    using (var readerOld = oldDB.ExecuteReader())
-                    {
-                        readerOld.Read();
-                        idLineOld = readerOld.GetInt32(0);
-                        idStationOld = readerOld.GetInt32(1);
-                    }
-                using (var newDB = new NpgsqlCommand($"select s.id_line, s.id_station FROM stations s, lines l" +
-                    $" WHERE l.name='{nameLineNew}' AND s.name='{nameStationNew}' AND s.id_line=l.id_line", connection))
-                    using (var readerNew = newDB.ExecuteReader())
-                    {
-                        readerNew.Read();
-                        idLineNew = readerNew.GetInt32(0);
-                        idStationNew = readerNew.GetInt32(1);
-                    }
 
-                using (var create = new NpgsqlCommand($"INSERT INTO clients (name, surname, patronymic, passport_series, passport_number," +
-                    $"phone_number, required_date, required_time, restriction, baggage, id_station_old, id_line_old, id_station_new, id_line_new, metro_seconds, taxi_seconds, destination_place)" +
-                    $" VALUES ('{name}', '{surname}', '{patronymic}', {passportSeries}, {passportNumber}, '{phoneNumber}', '{requiredDate}', '{requiredTime}', " +
-                    $"'{restriction}', {baggage}, {idStationOld}, {idLineOld}, {idStationNew}, {idLineNew}, {infoMetro}, {infoTaxi}, '{destinationPlace}')", connection))
+                using (var create = new NpgsqlCommand($"INSERT INTO patients (name, surname, patronymic, phone_number, address, email, anamnesis, complaints)" +
+                    $" VALUES ('{name}', '{surname}', '{patronymic}', '{phoneNumber}', '{address}', '{email}', '{anamnesis}', '{complaints}')" , connection))
                     if (create.ExecuteNonQuery() < 0)
                         throw new Exception("Неверно введены данные.");
                     else
@@ -138,15 +114,15 @@ namespace Ambulance
                         /*using (var length = new NpgsqlCommand($"SELECT ST_DistanceSphere(" +
                             $"(SELECT coordinates FROM stations WHERE id_line = {idLineNew} AND id_station = {idStationNew})::geometry," +
                             $"(SELECT coordinates FROM stations WHERE id_line = {idLineOld} AND id_station = {idStationOld})::geometry" +
-                            ") AS distance_in_meters;", connection))*/
-                        using (var keyDB = new NpgsqlCommand($"select id_client, delete_key FROM clients WHERE passport_series={passportSeries}" +
+                            ") AS distance_in_meters;", connection))
+                        using (var keyDB = new NpgsqlCommand($"select id_client, delete_key FROM clients WHERE passport_series={}" +
                             $" AND passport_number={passportNumber} ORDER BY id_client DESC", connection))
                         {
                             /*using (var readerLength = length.ExecuteReader())
                             {
                                 readerLength.Read();
                                 info[2] = Convert.ToInt32(readerLength.GetDouble(0) / 11.38888 * 1.2 + 7);
-                            }*/
+                            }
                             using (var readerLines = keyDB.ExecuteReader())
                             {
 
@@ -155,7 +131,7 @@ namespace Ambulance
                                 info[1] = readerLines.GetInt32(1);
                                 return info;
                             }
-                        }
+                        }*/
                     }
             }
         }

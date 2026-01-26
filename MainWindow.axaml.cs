@@ -5,12 +5,13 @@ namespace Ambulance
 {
     public partial class MainWindow : Window
     {
+        
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void OnRegistrationClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void Registration_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             // Сбрасываем стили всех кнопок
             ResetButtonStyles();
@@ -24,7 +25,7 @@ namespace Ambulance
             MainContent.Content = new RegistrationView();
         }
 
-        private void OnRequestsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void Requests_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             // Сбрасываем стили всех кнопок
             ResetButtonStyles();
@@ -38,7 +39,7 @@ namespace Ambulance
             MainContent.Content = new AllRequestsView();
         }
 
-        private void OnStatsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void Stats_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             // Сбрасываем стили всех кнопок
             ResetButtonStyles();
