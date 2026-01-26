@@ -17,7 +17,6 @@
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
           <TextBlock Text="Все заявки" FontSize="18" FontWeight="Bold" Foreground="Black"/>
-          <TextBlock Grid.Column="1" Text="6 из 6" FontSize="12" Foreground="#666" HorizontalAlignment="Right"/>
         </Grid>
 
         <!-- Search & Filters -->
@@ -30,7 +29,7 @@
           </Grid.ColumnDefinitions>
           <TextBox Watermark="Поиск по ФИО, номеру, адресу, телефону..." 
                    Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40"/>
-          <Button Grid.Column="1" Content="🔍" FontFamily="Segoe UI" Background="#ecfff8" 
+          <Button Grid.Column="1" Content="🔍" FontFamily="Segoe UI" Background="#ecfff8" FontSize="18"
                   Foreground="Black" Width="40" Height="40" Margin="10,0,0,0" BorderBrush="#333"/>
           <ComboBox Grid.Column="2" Background="#ecfff8" Foreground="Black" Height="40" Width="120" 
                     Margin="10,0,0,0" BorderBrush="#333">

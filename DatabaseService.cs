@@ -94,7 +94,7 @@ namespace Ambulance
             }
             return names;
         }
-        public void CreateClient(string name, string surname, string patronymic,
+        public void CreatePatient(string name, string surname, string patronymic,
                                  string phoneNumber, string address,
                                  string email, string anamnesis,
                                  string complaints, string status)
@@ -149,22 +149,55 @@ namespace Ambulance
             }
         }
 
-        public string GetCoordsTaxi(string endStation)
+        public string[] GetAllPatient(string name, string surname, string patronymic,
+                                 string phoneNumber, string address,
+                                 string email, string appealPurpose, string priority)
         {
-            string coords = "";
+            string request = $"SELECT  p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email, " +
+                $"p.anamnesis, p.complaints, c.appeal_purpose, c.priority FROM patients AS p ";
+            string[] requestParts = { "name", "surname", "patronymic", "phoneNumber", "address", "email" };
+            string[] strings = new string[50];
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
+                int counterWHERE = 0;
+                foreach (string part in requestParts)
+                {
+                    if (!string.IsNullOrEmpty(part))
+                    {
+                        if (counterWHERE == 0)
+                        {
+                            counterWHERE++;
+                            request += "WHERE p." + part + $" '{part}' ";
+                        }
+                        else
+                            request += "AND p." + part + $" '{part}' ";
+                    }
+                }
 
-                using (var coordsDB = new NpgsqlCommand($"SELECT ST_Y(coordinates), ST_X(coordinates) from stations WHERE name = '{endStation}'", connection))
+                request += "INNER JOIN calls AS c ON p.patient_id = c.patient_id ";
+                if (!string.IsNullOrEmpty(appealPurpose) || !string.IsNullOrEmpty(priority))
+                {
+                    if (!string.IsNullOrEmpty(appealPurpose))
+                    {
+                        request += "AND c.appeal_purpose " + $"'{appealPurpose}' ";
+                    }
+                    if (!string.IsNullOrEmpty(priority))
+                    {
+                        request += "AND c.priority " + $"'{priority}' ";
+                    }
+                }
+                request += ';';
+
+                using (var coordsDB = new NpgsqlCommand(request, connection))
                 using (var readerCoords = coordsDB.ExecuteReader())
                 {
 
                     readerCoords.Read();
-                    coords = readerCoords.GetDouble(0).ToString() + " " + readerCoords.GetDouble(1).ToString();
+                    name = readerCoords.GetDouble(0).ToString() + " " + readerCoords.GetDouble(1).ToString();
                 }
             }
-            return coords;
+            return strings;
         }
     }
 }

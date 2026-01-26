@@ -11,7 +11,7 @@ namespace Ambulance.Views;
 
 public partial class RegistrationView : UserControl
 {
-    DatabaseService _dt; 
+    DatabaseService _dt;
     string connectionString = "Server=localhost;Port=5432;Username=postgres;Password=123;Database=amb;";
     public RegistrationView()
     {
@@ -21,6 +21,15 @@ public partial class RegistrationView : UserControl
 
     private void Clear_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        Name.Text = "";
+        Surname.Text = "";
+        Patronymic.Text = "";
+        PhoneNumber.Text = "";
+        Email.Text = "";
+        Address.Text = "";
+        Anamnesis.Text = "";
+        Complaints.Text = "";
+        Status.SelectedIndex = -1;
     }
 
     private void Registration_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -35,11 +44,14 @@ public partial class RegistrationView : UserControl
             string address = Address.Text;
             string anamnesis = Anamnesis.Text;
             string complaints = Complaints.Text;
-            string status = Status.SelectedItem.ToString();
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(patronymic) || string.IsNullOrEmpty(phoneNumber) 
+            if (Status.SelectedIndex == -1)
+                throw new Exception("Пожалуйста, укажите цель поступившего звонка");
+            string appealPurpose = AppealPurpose.SelectedItem.ToString();
+
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(patronymic) || string.IsNullOrEmpty(phoneNumber)
                  || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(anamnesis) || string.IsNullOrEmpty(complaints))
                 throw new Exception("Пожалуйста, заполните все поля ввода");
-            _dt.CreateClient(name, surname, patronymic, phoneNumber, address, email, anamnesis, complaints, status);
+            _dt.CreatePatient(name, surname, patronymic, phoneNumber, address, email, anamnesis, complaints, appealPurpose);
         }
         catch (Exception ex)
         {
@@ -53,7 +65,7 @@ public partial class RegistrationView : UserControl
             new MessageBoxCustomParams
             {
                 ContentTitle = "Ошибка",
-                ContentMessage = $"{ex}",
+                ContentMessage = ex.Message, // Изменено: показываем только сообщение исключения
                 Icon = MsBox.Avalonia.Enums.Icon.Warning,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 ButtonDefinitions = new List<ButtonDefinition> {

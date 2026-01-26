@@ -46,8 +46,8 @@
                      Margin="0,10,0,0" TextWrapping="Wrap" Name="Complaints"/>
             <Grid Margin="0,10,0,0" ColumnDefinitions="*,*">
                 <ComboBox Grid.Column="0" Background="#ecfff8" Foreground="Black" Height="40" 
-                          PlaceholderText="Цель обращения" Name="Status" Margin="0,0,10,0">
-                    <ComboBoxItem Content="Консультация" IsSelected="True"/>
+                          PlaceholderText="Цель обращения" Name="AppealPurpose" Margin="0,0,10,0">
+                    <ComboBoxItem Content="Консультация"/>
                     <ComboBoxItem Content="Выезд"/>
                     <ComboBoxItem Content="Другая"/>
                 </ComboBox>
