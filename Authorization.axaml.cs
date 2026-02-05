@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
@@ -29,8 +30,21 @@ public partial class Authorization : Window
         this.Close();
     }
 
+    private void TextBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+            OnSubmit(sender, e);
+    }
+
     private void OnSubmit(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////         Убрать. Это само авторизация
+        var newWindow = new MainWindow();
+        newWindow.Show();
+        this.Close();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /*
         string login, password;
         try
         {
@@ -45,9 +59,8 @@ public partial class Authorization : Window
             ShowMessage(ex);
             return;
         }
-        var newWindow = new MainWindow();
         newWindow.Show();
-        this.Close();
+        this.Close();*/
     }
     private async void ShowMessage(Exception ex)
     {

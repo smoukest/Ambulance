@@ -13,6 +13,7 @@
             <Button x:Name="RegistrationButton" Content="Регистрация" Click="Registration_Click" Background="#E53935" Foreground="White" BorderThickness="0" Padding="10"/>
             <Button x:Name="RequestsButton" Content="Все заявки" Click="Requests_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
             <Button x:Name="StatsButton" Content="Статистика" Click="Stats_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
+                <Button x:Name="TestButton" Content="TEST" Click="Test_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
             </StackPanel>
         </Grid>
 

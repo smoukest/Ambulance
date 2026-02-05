@@ -9,7 +9,7 @@
         Title="Authorization"
         SystemDecorations="None"
         WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Grid KeyDown="TextBox_KeyDown">
 
         <StackPanel HorizontalAlignment="Center" Margin="0,0,0,0">
             <Grid Height="40" Width="200" Background="#32d1b4"  VerticalAlignment="Top" 

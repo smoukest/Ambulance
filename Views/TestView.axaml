@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Ambulance.Views.TestView">
+    <StackPanel>
+        <!-- Кнопка для раскрытия -->
+        <ToggleButton Name="ToggleButton1" Content="Показать/Скрыть текст" />
+
+        <!-- Раскрывающийся блок, привязанный к состоянию кнопки -->
+        <TextBlock Text="Это скрытый текст, который раскрывается!"
+                   IsVisible="{Binding #ToggleButton1.IsChecked}"
+                   Margin="10" />
+    </StackPanel>
+</UserControl>

@@ -13,4 +13,9 @@ public partial class AllRequestsView : UserControl
         InitializeComponent();
         _dt = new DatabaseService(connectionString);
     }
+
+    private void Search_click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _dt.GetAllPatient("", "", "", "", "", "", "", "");
+    }
 }

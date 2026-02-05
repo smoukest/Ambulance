@@ -29,7 +29,7 @@ public partial class RegistrationView : UserControl
         Address.Text = "";
         Anamnesis.Text = "";
         Complaints.Text = "";
-        Status.SelectedIndex = -1;
+        AppealPurpose.SelectedIndex = -1;
     }
 
     private void Registration_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -44,7 +44,7 @@ public partial class RegistrationView : UserControl
             string address = Address.Text;
             string anamnesis = Anamnesis.Text;
             string complaints = Complaints.Text;
-            if (Status.SelectedIndex == -1)
+            if (AppealPurpose.SelectedIndex == -1)
                 throw new Exception("Пожалуйста, укажите цель поступившего звонка");
             string appealPurpose = AppealPurpose.SelectedItem.ToString();
 

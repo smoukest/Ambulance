@@ -1,6 +1,8 @@
 ﻿using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using static System.Net.Mime.MediaTypeNames;
 
 
@@ -8,11 +10,17 @@ namespace Ambulance
 {
     public class DatabaseService
     {
+        [ModuleInitializer]
+        public static void Initialize()
+        {
+        }
         private readonly string _connectionString;
 
         public DatabaseService(string connectionString)
         {
             _connectionString = connectionString;
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
 
         public string[,] ConnectAndQuery()
@@ -149,52 +157,92 @@ namespace Ambulance
             }
         }
 
-        public string[] GetAllPatient(string name, string surname, string patronymic,
-                                 string phoneNumber, string address,
-                                 string email, string appealPurpose, string priority)
+        public string[,] GetAllPatient(string _name, string _surname, string _patronymic,
+                                 string _phoneNumber, string _address,
+                                 string _email, string _appealPurpose, string _priority)
         {
-            string request = $"SELECT  p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email, " +
-                $"p.anamnesis, p.complaints, c.appeal_purpose, c.priority FROM patients AS p ";
-            string[] requestParts = { "name", "surname", "patronymic", "phoneNumber", "address", "email" };
-            string[] strings = new string[50];
+            string request = @"
+                SELECT 
+                    p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email,
+                    p.anamnesis, p.complaints, 
+                    c.appeal_purpose, c.priority, c.call_id, c.time
+                FROM patients AS p
+                INNER JOIN calls AS c ON p.patient_id = c.patient_id
+                WHERE 
+                    (p.name = @name OR @name IS NULL) AND
+                    (p.surname = @surname OR @surname IS NULL) AND
+                    (p.patronymic = @patronymic OR @patronymic IS NULL) AND
+                    (p.phone_number = @phone_number OR @phone_number IS NULL) AND
+                    (p.address = @address OR @address IS NULL) AND
+                    (p.email = @email OR @email IS NULL) AND
+                    (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
+                    (c.priority = @priority OR @priority IS NULL);";
+            //string[] requestPartsNames = { "name", "surname", "patronymic", "phoneNumber", "address", "email" };
+            //string[] requestParts = { $"{_name}", $"{_surname}", $"{_patronymic}", $"{_phoneNumber}", $"{_address}", $"{_email}" };
+            string[,] strings = new string[50,11];
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
-                int counterWHERE = 0;
-                foreach (string part in requestParts)
+                /*int counterWHERE = 0;
+                for (int i = 0; i < requestParts.Length; i++)
                 {
-                    if (!string.IsNullOrEmpty(part))
+                    if (!string.IsNullOrEmpty(requestParts[i]))
                     {
                         if (counterWHERE == 0)
                         {
                             counterWHERE++;
-                            request += "WHERE p." + part + $" '{part}' ";
+                            request += "WHERE p." + requestPartsNames[i] + $" = '{requestParts[i]}' ";
                         }
                         else
-                            request += "AND p." + part + $" '{part}' ";
+                            request += "WHERE p." + requestPartsNames[i] + $" = '{requestParts[i]}' ";
                     }
                 }
 
                 request += "INNER JOIN calls AS c ON p.patient_id = c.patient_id ";
-                if (!string.IsNullOrEmpty(appealPurpose) || !string.IsNullOrEmpty(priority))
+                if (!string.IsNullOrEmpty(_appealPurpose))
                 {
-                    if (!string.IsNullOrEmpty(appealPurpose))
-                    {
-                        request += "AND c.appeal_purpose " + $"'{appealPurpose}' ";
-                    }
-                    if (!string.IsNullOrEmpty(priority))
-                    {
-                        request += "AND c.priority " + $"'{priority}' ";
-                    }
+                    request += "AND c.appeal_purpose = " + $"'{_appealPurpose}' ";
                 }
-                request += ';';
-
-                using (var coordsDB = new NpgsqlCommand(request, connection))
-                using (var readerCoords = coordsDB.ExecuteReader())
+                if (!string.IsNullOrEmpty(_priority))
                 {
+                    request += "AND c.priority = " + $"'{_priority}' ";
+                }
+                request += ';';*/
 
-                    readerCoords.Read();
-                    name = readerCoords.GetDouble(0).ToString() + " " + readerCoords.GetDouble(1).ToString();
+                using (var requestDB = new NpgsqlCommand(request, connection))
+                {
+                    requestDB.Parameters.Add("name", NpgsqlDbType.Varchar).Value = _name;
+                    requestDB.Parameters.Add("surname", NpgsqlDbType.Varchar).Value = _surname;
+                    requestDB.Parameters.Add("patronymic", NpgsqlDbType.Varchar).Value = _patronymic;
+                    requestDB.Parameters.Add("phone_number", NpgsqlDbType.Varchar).Value = _phoneNumber;
+                    requestDB.Parameters.Add("address", NpgsqlDbType.Varchar).Value = _address;
+                    requestDB.Parameters.Add("email", NpgsqlDbType.Varchar).Value = _email;
+                    requestDB.Parameters.Add("appeal_purpose", NpgsqlDbType.Varchar).Value = _appealPurpose;
+                    requestDB.Parameters.Add("priority", NpgsqlDbType.Varchar).Value = _priority;
+                    using (var patients = requestDB.ExecuteReader())
+                    {
+                        int countRows = 0;
+                        while (patients.Read())
+                        {
+                            /*for (int  i = 0; i <  patients.FieldCount; i++) 
+                                strings[countRows, i] = patients.GetString(i);*/
+                            string patinentId = patients.GetInt32(0).ToString();
+                            string name = patients.GetString(1);
+                            string surname = patients.GetString(2);
+                            string patronymic = patients.GetString(3);
+                            string phoneNumber = patients.GetString(4);
+                            string address = patients.GetString(5);
+                            string email = patients.GetString(6);
+                            string anamnesis = patients.GetString(7);
+                            string complaints = patients.GetString(8);
+                            string appeaPurpose = patients.GetString(9);
+                            string priority = patients.GetString(10);
+                            string callId = patients.GetInt32(11).ToString();
+                            DateTime timestamp = patients.GetDateTime(12);
+                            string time = timestamp.ToString();
+
+                        }
+                    }
                 }
             }
             return strings;
