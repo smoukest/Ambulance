@@ -11,216 +11,92 @@
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
+        <!-- Header -->
         <Grid Height="50" Margin="0,0,0,15">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <TextBlock Text="Все заявки" FontSize="18" FontWeight="Bold" Foreground="Black" VerticalAlignment="Center"/>
+          <TextBlock Text="Все заявки" FontSize="18" FontWeight="Bold" 
+                     Foreground="Black" VerticalAlignment="Center"/>
           
           <!-- Search Button -->
-          <Button Grid.Column="2" Content="🔍" FontFamily="Segoe UI" Background="#ecfff8" FontSize="18"
-                  Foreground="Black" Width="40" Height="40" Margin="0,0,10,0" BorderBrush="#333"
-                  VerticalAlignment="Center" HorizontalAlignment="Right" Click="Search_click"/>
+          <Button Grid.Column="2" x:Name="SearchButton" Content="🔍" 
+                  FontFamily="Segoe UI" Background="#ecfff8" FontSize="18"
+                  Foreground="Black" Width="40" Height="40" Margin="0,0,10,0" 
+                  BorderBrush="#333" VerticalAlignment="Center" 
+                  HorizontalAlignment="Right" Click="Search_click"/>
         </Grid>
 
-        <!-- Table -->
-        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto">
+        <!-- Filters Panel -->
+        <Border Grid.Row="1" Background="#ecfff8" CornerRadius="4" 
+                Padding="10" Margin="0,0,0,15">
           <Grid>
-            <!-- Table Headers -->
-            <Border CornerRadius="4">
-              <Grid Background="#a8f5e1" Margin="0,0,0,5">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="100"/>
-                  <ColumnDefinition Width="2*"/>
-                  <ColumnDefinition Width="150"/>
-                  <ColumnDefinition Width="100"/>
-                  <ColumnDefinition Width="100"/>
-                  <ColumnDefinition Width="100"/>
-                  <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="№ Заявки" FontWeight="Bold" Margin="10,5"/>
-                <TextBlock Grid.Column="1" Text="Пациент" FontWeight="Bold" Margin="10,5"/>
-                <TextBlock Grid.Column="2" Text="Телефон" FontWeight="Bold" Margin="10,5"/>
-                <TextBlock Grid.Column="3" Text="Приоритет" FontWeight="Bold" Margin="10,5"/>
-                <TextBlock Grid.Column="4" Text="Статус" FontWeight="Bold" Margin="10,5"/>
-                <TextBlock Grid.Column="5" Text="Время" FontWeight="Bold" Margin="10,5"/>
-                <TextBlock Grid.Column="6" Text="Бригада" FontWeight="Bold" Margin="10,5"/>
-              </Grid>
-            </Border>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
             
-            <!-- Filter/Sort Panel -->
-            <Border Grid.Row="1" Background="#ecfff8" Margin="0,30,0,10" CornerRadius="4" Padding="0,5" VerticalAlignment="Top">
-              <Grid>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="100"/>
-                  <ColumnDefinition Width="2*"/>
-                  <ColumnDefinition Width="150"/>
-                  <ColumnDefinition Width="100"/>
-                  <ColumnDefinition Width="100"/>
-                  <ColumnDefinition Width="100"/>
-                  <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-                
-                <!-- Filter for Request Number -->
-                <TextBox Watermark="#" Background="#d1ffef" BorderBrush="#333" 
-                         VerticalAlignment="Center" Margin="10,5" Padding="5"
-                         FontSize="12" Foreground="#666"/>
-                
-                <!-- Filter for Patient -->
-                <TextBox Grid.Column="1" Watermark="ФИО/Адрес" Background="#d1ffef" BorderBrush="#333" 
-                         VerticalAlignment="Center" Margin="10,5" Padding="5"
-                         FontSize="12" Foreground="#666"/>
-                
-                <!-- Filter for Phone -->
-                <TextBox Grid.Column="2" Watermark="Телефон" Background="#d1ffef" BorderBrush="#333" 
-                         VerticalAlignment="Center" Margin="10,5" Padding="5"
-                         FontSize="12" Foreground="#666"/>
-                
-                <!-- Filter for Priority -->
-                <ComboBox Grid.Column="3" Background="#d1ffef" BorderBrush="#333" 
-                          VerticalAlignment="Center" Margin="10,5" Height="28"
-                          FontSize="12" Foreground="#666">
-                  <ComboBoxItem Content="Экстренная"/>
-                  <ComboBoxItem Content="Неотложная"/>
-                </ComboBox>
-                
-                <!-- Filter for Status -->
-                <ComboBox Grid.Column="4" Background="#d1ffef" BorderBrush="#333" 
-                          VerticalAlignment="Center" Margin="10,5" Height="28"
-                          FontSize="12" Foreground="#666">
-                  <ComboBoxItem Content="В работе"/>
-                  <ComboBoxItem Content="Ожидание"/>
-                  <ComboBoxItem Content="Завершена"/>
-                </ComboBox>
-                
-                <!-- Filter for Time -->
-                <TextBox Grid.Column="5" Watermark="Время" Background="#d1ffef" BorderBrush="#333" 
-                         VerticalAlignment="Center" Margin="10,5" Padding="5"
-                         FontSize="12" Foreground="#666"/>
-                
-                <!-- Filter for Brigade -->
-                <TextBox Grid.Column="6" Watermark="№ бригад" Background="#d1ffef" BorderBrush="#333" 
-                         VerticalAlignment="Center" Margin="10,5" Padding="5"
-                         FontSize="12" Foreground="#666" />
-              </Grid>
-            </Border>
+            <!-- № Заявки -->
+            <TextBox x:Name="FilterRequestNumber" Watermark="№ заявки" 
+                     Background="#d1ffef" BorderBrush="#333" 
+                     VerticalAlignment="Center" Margin="5" Padding="5" 
+                     FontSize="12" Foreground="#666"/>
             
-            <!-- Table Rows -->
-            <Grid Grid.Row="2" Margin="0,75,0,0">
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-              </Grid.RowDefinitions>
-              
-              <!-- Row 1 -->
-              <Border Grid.Row="0" Background="#ecfff8" Margin="0,5,0,5" CornerRadius="4">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                  </Grid.ColumnDefinitions>
-                  
-                  <TextBlock Text="REQ-006" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
-                  
-                  <StackPanel Grid.Column="1" Margin="10,5">
-                    <TextBlock Text="Морозова О. П." FontWeight="Bold" Foreground="Black"/>
-                    <TextBlock Text="г. Москва, ул. Новый Арбат, д. 30, кв. 5" FontSize="12" Foreground="#666"/>
-                  </StackPanel>
-                  
-                  <TextBlock Grid.Column="2" Text="+7 (495) 666-77-88" Foreground="Black" Margin="10,5"/>
-                  
-                  <Border Grid.Column="3" Background="#FF9800" CornerRadius="4" Padding="5,2" Margin="10,5">
-                    <TextBlock Text="Средний" Foreground="White" TextAlignment="Center" FontSize="12"/>
-                  </Border>
-                  
-                  <Border Grid.Column="4" Background="#2196F3" CornerRadius="4" Padding="5,2" Margin="10,5">
-                    <TextBlock Text="Новая" Foreground="White" TextAlignment="Center" FontSize="12"/>
-                  </Border>
-                  
-                  <TextBlock Grid.Column="5" Text="10:46 21.01" Foreground="Black" Margin="10,5"/>
-                  <TextBlock Grid.Column="6" Text="—" Foreground="#666" Margin="10,5"/>
-                </Grid>
-              </Border>
-              
-              <!-- Row 2 -->
-              <Border Grid.Row="1" Background="#ecfff8" Margin="0,5,0,5" CornerRadius="4">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                  </Grid.ColumnDefinitions>
-                  
-                  <TextBlock Text="REQ-003" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
-                  
-                  <StackPanel Grid.Column="1" Margin="10,5">
-                    <TextBlock Text="Козлов А. В." FontWeight="Bold" Foreground="Black"/>
-                    <TextBlock Text="г. Москва, ул. Тверская, д. 25, кв. 8" FontSize="12" Foreground="#666"/>
-                  </StackPanel>
-                  
-                  <TextBlock Grid.Column="2" Text="+7 (495) 777-88-99" Foreground="Black" Margin="10,5"/>
-                  
-                  <Border Grid.Column="3" Background="#F44336" CornerRadius="4" Padding="5,2" Margin="10,5">
-                    <TextBlock Text="Высокий" Foreground="White" TextAlignment="Center" FontSize="12"/>
-                  </Border>
-                  
-                  <Border Grid.Column="4" Background="#FF9800" CornerRadius="4" Padding="5,2" Margin="10,5">
-                    <TextBlock Text="В работе" Foreground="White" TextAlignment="Center" FontSize="12"/>
-                  </Border>
-                  
-                  <TextBlock Grid.Column="5" Text="10:42 21.01" Foreground="Black" Margin="10,5"/>
-                  <TextBlock Grid.Column="6" Text="Бригада №1" Foreground="Black" Margin="10,5"/>
-                </Grid>
-              </Border>
-              
-              <!-- Row 3 -->
-              <Border Grid.Row="2" Background="#ecfff8" Margin="0,5,0,5" CornerRadius="4">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                  </Grid.ColumnDefinitions>
-                  
-                  <TextBlock Text="REQ-002" Foreground="#FF5252" FontWeight="Bold" Margin="10,5"/>
-                  
-                  <StackPanel Grid.Column="1" Margin="10,5">
-                    <TextBlock Text="Петров С. И." FontWeight="Bold" Foreground="Black"/>
-                    <TextBlock Text="г. Москва, ул. Ленина, д. 15, кв. 42" FontSize="12" Foreground="#666"/>
-                  </StackPanel>
-                  
-                  <TextBlock Grid.Column="2" Text="+7 (495) 555-66-77" Foreground="Black" Margin="10,5"/>
-                  
-                  <Border Grid.Column="3" Background="#4CAF50" CornerRadius="4" Padding="5,2" Margin="10,5">
-                    <TextBlock Text="Низкий" Foreground="White" TextAlignment="Center" FontSize="12"/>
-                  </Border>
-                  
-                  <Border Grid.Column="4" Background="#4CAF50" CornerRadius="4" Padding="5,2" Margin="10,5">
-                    <TextBlock Text="Завершена" Foreground="White" TextAlignment="Center" FontSize="12"/>
-                  </Border>
-                  
-                  <TextBlock Grid.Column="5" Text="09:30 21.01" Foreground="Black" Margin="10,5"/>
-                  <TextBlock Grid.Column="6" Text="Бригада №3" Foreground="Black" Margin="10,5"/>
-                </Grid>
-              </Border>
-            </Grid>
+            <!-- ФИО/Адрес -->
+            <TextBox x:Name="FilterPatient" Grid.Column="1" Watermark="ФИО/Адрес" 
+                     Background="#d1ffef" BorderBrush="#333" 
+                     VerticalAlignment="Center" Margin="5" Padding="5" 
+                     FontSize="12" Foreground="#666"/>
+            
+            <!-- Телефон -->
+            <TextBox x:Name="FilterPhone" Grid.Column="2" Watermark="Телефон" 
+                     Background="#d1ffef" BorderBrush="#333" 
+                     VerticalAlignment="Center" Margin="5" Padding="5" 
+                     FontSize="12" Foreground="#666"/>
+            
+            <!-- Фильтр по Приоритету (Button + Flyout) -->
+            <Button Grid.Column="3" x:Name="PriorityFilterButton" 
+                    Background="#d1ffef" BorderBrush="#333" 
+                    VerticalAlignment="Center" Margin="10,5" Height="28"
+                    FontSize="12" Foreground="#666" HorizontalContentAlignment="Left"
+                    Content="Приоритет" Click="PriorityFilterButton_Click"/>
+
+            <!-- Фильтр по Статусу (Button + Flyout) -->
+            <Button Grid.Column="4" x:Name="StatusFilterButton" 
+                    Background="#d1ffef" BorderBrush="#333" 
+                    VerticalAlignment="Center" Margin="10,5" Height="28"
+                    FontSize="12" Foreground="#666" HorizontalContentAlignment="Left"
+                    Content="Статус" Click="StatusFilterButton_Click"/>
+            
+            <!-- Время -->
+            <DatePicker x:Name="FilterDate" Grid.Column="5" 
+                        Background="#d1ffef" BorderBrush="#333" 
+                        VerticalAlignment="Center" Margin="5" Height="28"/>
+            
+            <!-- Бригада -->
+            <ComboBox x:Name="FilterBrigade" Grid.Column="6" 
+                      Background="#d1ffef" BorderBrush="#333" 
+                      VerticalAlignment="Center" Margin="5" Height="28" 
+                      FontSize="12" Foreground="#666">
+              <ComboBoxItem Content="Все"/>
+              <ComboBoxItem Content="Бригада №1"/>
+              <ComboBoxItem Content="Бригада №2"/>
+              <ComboBoxItem Content="Бригада №3"/>
+            </ComboBox>
           </Grid>
+        </Border>
+
+        <!-- Calls Table -->
+        <ScrollViewer Grid.Row="2" x:Name="CallsScrollViewer" 
+                      HorizontalScrollBarVisibility="Auto">
+          <StackPanel x:Name="CallsContainer" Spacing="5"/>
         </ScrollViewer>
       </Grid>
     </Border>

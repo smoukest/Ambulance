@@ -19,7 +19,7 @@
 
 <!-- Content Area -->
         <ContentControl Name="MainContent" Margin="0,70,0,0">
-            <views:RegistrationView/> <!-- Стартовый экран -->
+            <views:AllRequestsView/> <!-- Стартовый экран -->
         </ContentControl>
     </Grid>
 </Window>

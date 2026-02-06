@@ -161,7 +161,7 @@ namespace Ambulance
                                  string _phoneNumber, string _address,
                                  string _email, string _appealPurpose, string _priority)
         {
-            string request = @"
+            /*string request = @"
                 SELECT 
                     p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email,
                     p.anamnesis, p.complaints, 
@@ -176,10 +176,26 @@ namespace Ambulance
                     (p.address = @address OR @address IS NULL) AND
                     (p.email = @email OR @email IS NULL) AND
                     (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
+                    (c.priority = @priority OR @priority IS NULL);";*/
+            string request = @"
+                SELECT 
+                    p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email,
+                    p.anamnesis, p.complaints,
+                    c.appeal_purpose, c.priority, c.call_id, c.time
+                FROM patients AS p
+                INNER JOIN calls AS c ON p.patient_id = c.patient_id
+                WHERE 
+                    (p.name = @name OR @name IS NULL) AND
+                    (p.surname = @surname OR @surname IS NULL) AND
+                    (p.patronymic = @patronymic OR @patronymic IS NULL) AND
+                    (p.phone_number = @phone_number OR @phone_number IS NULL) AND
+                    (p.address = @address OR @address IS NULL) AND
+                    (p.email = @email OR @email IS NULL) AND
+                    (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
                     (c.priority = @priority OR @priority IS NULL);";
             //string[] requestPartsNames = { "name", "surname", "patronymic", "phoneNumber", "address", "email" };
             //string[] requestParts = { $"{_name}", $"{_surname}", $"{_patronymic}", $"{_phoneNumber}", $"{_address}", $"{_email}" };
-            string[,] strings = new string[50,11];
+            string[,] patients = new string[50,13];
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
@@ -219,33 +235,33 @@ namespace Ambulance
                     requestDB.Parameters.Add("email", NpgsqlDbType.Varchar).Value = _email;
                     requestDB.Parameters.Add("appeal_purpose", NpgsqlDbType.Varchar).Value = _appealPurpose;
                     requestDB.Parameters.Add("priority", NpgsqlDbType.Varchar).Value = _priority;
-                    using (var patients = requestDB.ExecuteReader())
+                    using (var patientsDB = requestDB.ExecuteReader())
                     {
                         int countRows = 0;
-                        while (patients.Read())
+                        while (patientsDB.Read())
                         {
-                            /*for (int  i = 0; i <  patients.FieldCount; i++) 
-                                strings[countRows, i] = patients.GetString(i);*/
-                            string patinentId = patients.GetInt32(0).ToString();
-                            string name = patients.GetString(1);
-                            string surname = patients.GetString(2);
-                            string patronymic = patients.GetString(3);
-                            string phoneNumber = patients.GetString(4);
-                            string address = patients.GetString(5);
-                            string email = patients.GetString(6);
-                            string anamnesis = patients.GetString(7);
-                            string complaints = patients.GetString(8);
-                            string appeaPurpose = patients.GetString(9);
-                            string priority = patients.GetString(10);
-                            string callId = patients.GetInt32(11).ToString();
-                            DateTime timestamp = patients.GetDateTime(12);
-                            string time = timestamp.ToString();
-
+                            /*for (int  i = 0; i <  patientsDB.FieldCount; i++) 
+                                patients[countRows, i] = patientsDB.GetString(i);*/
+                            patients[countRows, 0]  = patientsDB.GetInt32(0).ToString();                   //patientId
+                            patients[countRows, 1] = patientsDB.GetString(1);                              //name
+                            patients[countRows, 2] = patientsDB.GetString(2);                              //surname
+                            patients[countRows, 3] = patientsDB.GetString(3);                              //patronymic
+                            patients[countRows, 4] = patientsDB.GetString(4);                              //phoneNumber
+                            patients[countRows, 5] = patientsDB.GetString(6);                              //address
+                            patients[countRows, 6] = patientsDB.GetString(5);                              //email
+                            patients[countRows, 7] = patientsDB.GetString(7);                              //anamnesis
+                            patients[countRows, 8] = patientsDB.GetString(8);                              //complaints
+                            patients[countRows, 9] = patientsDB.GetString(9);                              //appealPurpose
+                            patients[countRows, 10] = patientsDB.GetString(10);                            //priority
+                            patients[countRows, 11] = patientsDB.GetInt32(11).ToString();                  //callId
+                            DateTime timestamp = patientsDB.GetDateTime(12);
+                            patients[countRows, 12] = timestamp.ToString();                              //time
+                            countRows++;
                         }
                     }
                 }
             }
-            return strings;
+            return patients;
         }
     }
 }
