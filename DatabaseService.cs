@@ -1,8 +1,17 @@
 ﻿using Npgsql;
+using Npgsql;
 using NpgsqlTypes;
 using System;
+using System;
 using System.Drawing;
+using System.IO;
+using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text;
+using System.Xml.Linq;
+using Tmds.DBus.Protocol;
 using static System.Net.Mime.MediaTypeNames;
 
 
@@ -10,17 +19,51 @@ namespace Ambulance
 {
     public class DatabaseService
     {
-        [ModuleInitializer]
+        /*[ModuleInitializer]
         public static void Initialize()
         {
-        }
+        }*/
         private readonly string _connectionString;
+        private readonly bool _enableLogging = true;
 
         public DatabaseService(string connectionString)
         {
             _connectionString = connectionString;
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+        }
+        
+
+        // Метод для логирования запроса
+        private void LogQuery(NpgsqlCommand cmd, string methodName)
+        {
+            if (!_enableLogging) return;
+            var sb = new StringBuilder();
+            sb.AppendLine(new string('=', 100));
+            sb.AppendLine($"[{DateTime.Now:HH:mm:ss.fff}] Метод: {methodName}");
+            sb.AppendLine("SQL ЗАПРОС:");
+            sb.AppendLine(cmd.CommandText);
+            sb.AppendLine();
+            sb.AppendLine("ПАРАМЕТРЫ:");
+
+            foreach (NpgsqlParameter p in cmd.Parameters)
+            {
+                string valueStr = p.Value == null || p.Value == DBNull.Value
+                    ? "NULL"
+                    : $"\"{p.Value}\"";
+
+                sb.AppendLine($"  • @{p.ParameterName} = {valueStr} [{p.NpgsqlDbType}]");
+            }
+
+            sb.AppendLine(new string('=', 100));
+
+            // Вывод в консоль
+            Console.WriteLine(sb.ToString());
+
+            // Сохранение в файл (опционально)
+            
+
+                File.AppendAllText("C:\\Users\\OSM\\OneDrive\\Desktop\\sql_debug.log", sb.ToString() + Environment.NewLine);
         }
 
         public string[,] ConnectAndQuery()
@@ -181,21 +224,14 @@ namespace Ambulance
                 SELECT 
                     p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email,
                     p.anamnesis, p.complaints,
-                    c.appeal_purpose, c.priority, c.call_id, c.time
+                    c.appeal_purpose, c.priority, c.call_id, c.time, c.status,
+                    v.visit_id
                 FROM patients AS p
                 INNER JOIN calls AS c ON p.patient_id = c.patient_id
-                WHERE 
-                    (p.name = @name OR @name IS NULL) AND
-                    (p.surname = @surname OR @surname IS NULL) AND
-                    (p.patronymic = @patronymic OR @patronymic IS NULL) AND
-                    (p.phone_number = @phone_number OR @phone_number IS NULL) AND
-                    (p.address = @address OR @address IS NULL) AND
-                    (p.email = @email OR @email IS NULL) AND
-                    (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
-                    (c.priority = @priority OR @priority IS NULL);";
+                INNER JOIN visits AS v ON v.call_id = c.call_id;";
             //string[] requestPartsNames = { "name", "surname", "patronymic", "phoneNumber", "address", "email" };
             //string[] requestParts = { $"{_name}", $"{_surname}", $"{_patronymic}", $"{_phoneNumber}", $"{_address}", $"{_email}" };
-            string[,] patients = new string[50,13];
+            string[,] patients = new string[50,15];
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
@@ -227,14 +263,16 @@ namespace Ambulance
 
                 using (var requestDB = new NpgsqlCommand(request, connection))
                 {
-                    requestDB.Parameters.Add("name", NpgsqlDbType.Varchar).Value = _name;
-                    requestDB.Parameters.Add("surname", NpgsqlDbType.Varchar).Value = _surname;
-                    requestDB.Parameters.Add("patronymic", NpgsqlDbType.Varchar).Value = _patronymic;
-                    requestDB.Parameters.Add("phone_number", NpgsqlDbType.Varchar).Value = _phoneNumber;
-                    requestDB.Parameters.Add("address", NpgsqlDbType.Varchar).Value = _address;
-                    requestDB.Parameters.Add("email", NpgsqlDbType.Varchar).Value = _email;
-                    requestDB.Parameters.Add("appeal_purpose", NpgsqlDbType.Varchar).Value = _appealPurpose;
-                    requestDB.Parameters.Add("priority", NpgsqlDbType.Varchar).Value = _priority;
+                    requestDB.Parameters.AddWithValue("name", NpgsqlDbType.Varchar, _name ?? (object)DBNull.Value);
+                    requestDB.Parameters.AddWithValue("surname", NpgsqlDbType.Varchar, _surname ?? (object)DBNull.Value);
+                    requestDB.Parameters.AddWithValue("patronymic", NpgsqlDbType.Varchar, _patronymic ?? (object)DBNull.Value);
+                    requestDB.Parameters.AddWithValue("phone_number", NpgsqlDbType.Varchar, "" ?? (object)DBNull.Value);
+                    requestDB.Parameters.AddWithValue("address", NpgsqlDbType.Varchar, _address ?? (object)DBNull.Value);
+                    requestDB.Parameters.AddWithValue("email", NpgsqlDbType.Varchar, _email ?? (object)DBNull.Value);
+                    requestDB.Parameters.AddWithValue("appeal_purpose", NpgsqlDbType.Varchar, _appealPurpose ?? (object)DBNull.Value);
+                    requestDB.Parameters.AddWithValue("priority", NpgsqlDbType.Varchar, _priority ?? (object)DBNull.Value);
+
+                    LogQuery(requestDB, nameof(GetAllPatient));
                     using (var patientsDB = requestDB.ExecuteReader())
                     {
                         int countRows = 0;
@@ -247,15 +285,17 @@ namespace Ambulance
                             patients[countRows, 2] = patientsDB.GetString(2);                              //surname
                             patients[countRows, 3] = patientsDB.GetString(3);                              //patronymic
                             patients[countRows, 4] = patientsDB.GetString(4);                              //phoneNumber
-                            patients[countRows, 5] = patientsDB.GetString(6);                              //address
-                            patients[countRows, 6] = patientsDB.GetString(5);                              //email
+                            patients[countRows, 6] = patientsDB.GetString(5);                              //address
+                            patients[countRows, 5] = patientsDB.GetString(6);                              //email
                             patients[countRows, 7] = patientsDB.GetString(7);                              //anamnesis
                             patients[countRows, 8] = patientsDB.GetString(8);                              //complaints
                             patients[countRows, 9] = patientsDB.GetString(9);                              //appealPurpose
                             patients[countRows, 10] = patientsDB.GetString(10);                            //priority
                             patients[countRows, 11] = patientsDB.GetInt32(11).ToString();                  //callId
                             DateTime timestamp = patientsDB.GetDateTime(12);
-                            patients[countRows, 12] = timestamp.ToString();                              //time
+                            patients[countRows, 12] = timestamp.ToString();                                //time
+                            patients[countRows, 13] = patientsDB.GetString(13);                             //status
+                            patients[countRows, 14] = patientsDB.GetInt32(14).ToString();                  //visitId
                             countRows++;
                         }
                     }

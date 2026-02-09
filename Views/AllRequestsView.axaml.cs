@@ -28,16 +28,79 @@ public partial class AllRequestsView : UserControl
         InitializeFilters(); // Инициализация фильтров
     }
 
-    private void Search_click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void Search_click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        string[,] patients = _dt.GetAllPatient("Иван", "Иванов", "Иванович", "89031234567", "г. Москва, ул. Ленина, д. 10, кв. 5", "ivanov@example.com", "Выезд", "Средний");
+        // 1. ОЧИСТИТЬ контейнер перед добавлением новых строк!
+        CallsContainer.Children.Clear();
+
+        // 2. Получить значения из фильтров (пустые поля = пустые строки)
+        string name = "";
+        string surname = "";
+        string patronymic = "";
+
+        // Разбор ФИО из одного поля
+        if (!string.IsNullOrWhiteSpace(FilterPatient.Text))
+        {
+            var parts = FilterPatient.Text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length > 0) surname = parts[0];
+            if (parts.Length > 1) name = parts[1];
+            if (parts.Length > 2) patronymic = parts[2];
+        }
+
+        string phone = FilterPhone.Text;
+        string address = ""; // FilterAddress не существует в вашем XAML
+        string email = "";
+        string appealPurpose = "";
+        string priority = GetSelectedPriorities().Any() ? GetSelectedPriorities()[0] : "";
+
+        // 3. Выполнить запрос
+        string[,] patients = _dt.GetAllPatient(
+            name,
+            surname,
+            patronymic,
+            phone,
+            address,
+            email,
+            appealPurpose,
+            priority
+        );
+
+        // 4. Добавить строки в контейнер
+        for (int i = 0; i < patients.GetLength(1); i++)
+        {
+            // Проверка на конец данных (предполагаем, что пустой patient_id = конец)
+            if (string.IsNullOrWhiteSpace(patients[i, 0]))
+                break;
+
+            // ВАЖНО: порядок параметров ДОЛЖЕН соответствовать сигнатуре CreateCallRow!
+            var row = CreateCallRow(
+                patients[i, 0],  // patientId
+                patients[i, 1],  // name
+                patients[i, 2],  // surname
+                patients[i, 3],  // patronymic
+                patients[i, 4],  // phone
+                patients[i, 5],  // address
+                patients[i, 6],  // email
+                patients[i, 7],  // anamnesis
+                patients[i, 8],  // complaints
+                patients[i, 9],  // appealPurpose
+                patients[i, 10], // priority
+                patients[i, 11], // callId
+                patients[i, 12], // time
+                patients[i, 13], // status
+                patients[i, 14]  // visitId
+            );
+
+            // КРИТИЧЕСКИ ВАЖНО: добавить строку в контейнер!
+            CallsContainer.Children.Add(row);
+        }
     }
 
     private Border CreateCallRow(
-            string callId, string surname, string name, string patronymic,
-            string address, string phone, string email, string anamnesis,
+            string patientId , string name, string surname, string patronymic,
+            string phone, string address, string email, string anamnesis,
             string complaints, string appealPurpose, string priority,
-            DateTime time, string status, string? brigadeId)
+            string callId, string time, string status, string visitId)
     {
         // Создание раскрывающегося блока
         var expander = new Expander
@@ -139,7 +202,7 @@ public partial class AllRequestsView : UserControl
         // Время
         var timeBlock = new TextBlock
         {
-            Text = time.ToString("HH:mm dd.MM"),
+            Text = DateTime.Parse(time).ToString("HH:mm dd.MM"),
             Foreground = Brushes.Black,
             Margin = new Thickness(10, 8, 10, 8)
         };
@@ -150,7 +213,7 @@ public partial class AllRequestsView : UserControl
         // Бригада
         var brigadeBlock = new TextBlock
         {
-            Text = !string.IsNullOrEmpty(brigadeId) ? $"Бригада №{brigadeId}" : "—",
+            Text = !string.IsNullOrEmpty(callId) ? $"Бригада №{callId}" : "—",
             Foreground = Brushes.Black,
             Margin = new Thickness(10, 8, 10, 8)
         };
