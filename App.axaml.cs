@@ -8,7 +8,6 @@ namespace Ambulance
 {
     public partial class App : Application
     {
-        private ClientSocket _clientSocket;
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);

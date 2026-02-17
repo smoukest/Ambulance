@@ -1,25 +1,26 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:views="clr-namespace:Ambulance.Views"
-        x:Class="Ambulance.MainWindow"
-        Background="#d1ffef"
-        Width="1200" Height="800"
-        Title="Диспетчер">
-    
-    <Grid>
-<!-- Navigation Bar -->
-        <Grid Height="70" Background="#32d1b4" VerticalAlignment="Top">
-            <StackPanel Orientation="Horizontal" Margin="10">
-            <Button x:Name="RegistrationButton" Content="Регистрация" Click="Registration_Click" Background="#E53935" Foreground="White" BorderThickness="0" Padding="10"/>
-            <Button x:Name="RequestsButton" Content="Все заявки" Click="Requests_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
-            <Button x:Name="StatsButton" Content="Статистика" Click="Stats_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
-                <Button x:Name="TestButton" Content="TEST" Click="Test_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
-            </StackPanel>
-        </Grid>
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:views="clr-namespace:Ambulance.Views"
+		x:Class="Ambulance.MainWindow"
+		Background="#d1ffef"
+		Width="1200" Height="800"
+		Title="Диспетчер">
 
-<!-- Content Area -->
-        <ContentControl Name="MainContent" Margin="0,70,0,0">
-            <views:AllRequestsView/> <!-- Стартовый экран -->
-        </ContentControl>
-    </Grid>
+	<Grid>
+		<!-- Navigation Bar -->
+		<Grid Height="70" Background="#32d1b4" VerticalAlignment="Top">
+			<StackPanel Orientation="Horizontal" Margin="10">
+				<Button x:Name="RegistrationButton" Content="Регистрация" Click="Registration_Click" Background="#E53935" Foreground="White" BorderThickness="0" Padding="10"/>
+				<Button x:Name="RequestsButton" Content="Все заявки" Click="Requests_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
+				<Button x:Name="StatsButton" Content="Статистика" Click="Stats_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
+				<Button x:Name="TestButton" Content="TEST" Click="Test_Click" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
+				<Button x:Name="TestButton2" Content="TEST2" Click="Test_Click2" Background="Transparent" Foreground="White" BorderThickness="0" Padding="10"/>
+			</StackPanel>
+		</Grid>
+
+		<!-- Content Area -->
+		<ContentControl Name="MainContent" Margin="0,70,0,0">
+			<views:AllRequestsView/> <!-- Стартовый экран -->
+		</ContentControl>
+	</Grid>
 </Window>

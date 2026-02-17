@@ -67,6 +67,20 @@ namespace Ambulance
             MainContent.Content = new TestView();
         }
 
+        private void Test_Click2(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            // Сбрасываем стили всех кнопок
+            ResetButtonStyles();
+
+            // Устанавливаем стиль для активной кнопки
+            var testButton = this.FindControl<Button>("TestButton2");
+            testButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
+            testButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
+
+            // Меняем контент на представление статистики
+            //MainContent.Content = new TestViewModel();
+        }
+
         private void ResetButtonStyles()
         {
             var registrationButton = this.FindControl<Button>("RegistrationButton");

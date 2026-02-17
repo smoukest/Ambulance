@@ -1,104 +1,283 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Ambulance.Views.AllRequestsView">
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 x:Class="Ambulance.Views.AllRequestsView"
+			 xmlns:vm="using:Ambulance.ViewModels"
+			 x:DataType="vm:AllRequestsViewModel">
 
-  <Grid Background="#32d1b4">
-    <Border Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5">
-      <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        
-        <!-- Header -->
-        <Grid Height="50" Margin="0,0,0,15">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
-          <TextBlock Text="Все заявки" FontSize="18" FontWeight="Bold" 
-                     Foreground="Black" VerticalAlignment="Center"/>
-          
-          <!-- Search Button -->
-          <Button Grid.Column="2" x:Name="SearchButton" Content="🔍" 
-                  FontFamily="Segoe UI" Background="#ecfff8" FontSize="18"
-                  Foreground="Black" Width="40" Height="40" Margin="0,0,10,0" 
-                  BorderBrush="#333" VerticalAlignment="Center" 
-                  HorizontalAlignment="Right" Click="Search_click"/>
-        </Grid>
+	<Grid Background="#32d1b4">
+		<Border Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5">
+			<Grid Grid.IsSharedSizeScope="True">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
 
-        <!-- Filters Panel -->
-        <Border Grid.Row="1" Background="#ecfff8" CornerRadius="4" 
-                Padding="10" Margin="0,0,0,15">
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="100"/>
-              <ColumnDefinition Width="2*"/>
-              <ColumnDefinition Width="150"/>
-              <ColumnDefinition Width="100"/>
-              <ColumnDefinition Width="100"/>
-              <ColumnDefinition Width="100"/>
-              <ColumnDefinition Width="100"/>
-            </Grid.ColumnDefinitions>
-            
-            <!-- № Заявки -->
-            <TextBox x:Name="FilterRequestNumber" Watermark="№ заявки" 
-                     Background="#d1ffef" BorderBrush="#333" 
-                     VerticalAlignment="Center" Margin="5" Padding="5" 
-                     FontSize="12" Foreground="#666"/>
-            
-            <!-- ФИО/Адрес -->
-            <TextBox x:Name="FilterPatient" Grid.Column="1" Watermark="ФИО/Адрес" 
-                     Background="#d1ffef" BorderBrush="#333" 
-                     VerticalAlignment="Center" Margin="5" Padding="5" 
-                     FontSize="12" Foreground="#666"/>
-            
-            <!-- Телефон -->
-            <TextBox x:Name="FilterPhone" Grid.Column="2" Watermark="Телефон" 
-                     Background="#d1ffef" BorderBrush="#333" 
-                     VerticalAlignment="Center" Margin="5" Padding="5" 
-                     FontSize="12" Foreground="#666"/>
-            
-            <!-- Фильтр по Приоритету (Button + Flyout) -->
-            <Button Grid.Column="3" x:Name="PriorityFilterButton" 
-                    Background="#d1ffef" BorderBrush="#333" 
-                    VerticalAlignment="Center" Margin="10,5" Height="28"
-                    FontSize="12" Foreground="#666" HorizontalContentAlignment="Left"
-                    Content="Приоритет" Click="PriorityFilterButton_Click"/>
+				<!-- Header -->
+				<Grid Height="50" Margin="0,0,0,15">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+					<TextBlock Text="Все заявки" FontSize="18" FontWeight="Bold"
+							   Foreground="Black" VerticalAlignment="Center"/>
 
-            <!-- Фильтр по Статусу (Button + Flyout) -->
-            <Button Grid.Column="4" x:Name="StatusFilterButton" 
-                    Background="#d1ffef" BorderBrush="#333" 
-                    VerticalAlignment="Center" Margin="10,5" Height="28"
-                    FontSize="12" Foreground="#666" HorizontalContentAlignment="Left"
-                    Content="Статус" Click="StatusFilterButton_Click"/>
-            
-            <!-- Время -->
-            <DatePicker x:Name="FilterDate" Grid.Column="5" 
-                        Background="#d1ffef" BorderBrush="#333" 
-                        VerticalAlignment="Center" Margin="5" Height="28"/>
-            
-            <!-- Бригада -->
-            <ComboBox x:Name="FilterBrigade" Grid.Column="6" 
-                      Background="#d1ffef" BorderBrush="#333" 
-                      VerticalAlignment="Center" Margin="5" Height="28" 
-                      FontSize="12" Foreground="#666">
-              <ComboBoxItem Content="Все"/>
-              <ComboBoxItem Content="Бригада №1"/>
-              <ComboBoxItem Content="Бригада №2"/>
-              <ComboBoxItem Content="Бригада №3"/>
-            </ComboBox>
-          </Grid>
-        </Border>
+					<!-- Search Button -->
+					<Button Grid.Column="2" Content="🔍" Click="SearchButton_Click"
+							FontFamily="Segoe UI" Background="#ecfff8" FontSize="18"
+							Foreground="Black" Width="40" Height="40" Margin="0,0,10,0"
+							BorderBrush="#333" VerticalAlignment="Center"
+							HorizontalAlignment="Right"/>
+				</Grid>
 
-        <!-- Calls Table -->
-        <ScrollViewer Grid.Row="2" x:Name="CallsScrollViewer" 
-                      HorizontalScrollBarVisibility="Auto">
-          <StackPanel x:Name="CallsContainer" Spacing="5"/>
-        </ScrollViewer>
-      </Grid>
-    </Border>
-  </Grid>
+				<!-- Table Header (Column Titles) -->
+				<Border Grid.Row="1" Background="#4CAF50" CornerRadius="4" Padding="0" Margin="0,0,0,10">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="1*" SharedSizeGroup="Col0"/>
+							<ColumnDefinition Width="2*" SharedSizeGroup="Col1"/>
+							<ColumnDefinition Width="1*" SharedSizeGroup="Col2"/>
+							<ColumnDefinition Width="1*" SharedSizeGroup="Col3"/>
+							<ColumnDefinition Width="1*" SharedSizeGroup="Col4"/>
+						</Grid.ColumnDefinitions>
+
+						<TextBlock Text="№ Заявки" Foreground="White" FontWeight="Bold" FontSize="12" 
+								   VerticalAlignment="Center" Margin="10,10"/>
+						<TextBlock Grid.Column="1" Text="ФИО и Контакты" Foreground="White" FontWeight="Bold" FontSize="12"
+								   VerticalAlignment="Center" Margin="10,10"/>
+						<TextBlock Grid.Column="2" Text="Приоритет" Foreground="White" FontWeight="Bold" FontSize="12"
+								   VerticalAlignment="Center" Margin="10,10" TextAlignment="Center"/>
+						<TextBlock Grid.Column="3" Text="Статус" Foreground="White" FontWeight="Bold" FontSize="12"
+								   VerticalAlignment="Center" Margin="10,10" TextAlignment="Center"/>
+						<TextBlock Grid.Column="4" Text="Время" Foreground="White" FontWeight="Bold" FontSize="12"
+								   VerticalAlignment="Center" Margin="10,10"/>
+					</Grid>
+				</Border>
+
+				<!-- Filters Panel -->
+				<Border Grid.Row="2" Background="#ecfff8" CornerRadius="4"
+						Padding="10" Margin="0,0,0,15">
+					<StackPanel>
+						<!-- Верхняя строка фильтров -->
+						<Grid Margin="0,0,0,10">
+							<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="1*" SharedSizeGroup="Col0"/>
+							<ColumnDefinition Width="2*" SharedSizeGroup="Col1"/>
+							<ColumnDefinition Width="1*" SharedSizeGroup="Col2"/>
+							<ColumnDefinition Width="1*" SharedSizeGroup="Col3"/>
+							<ColumnDefinition Width="1*" SharedSizeGroup="Col4"/>
+						</Grid.ColumnDefinitions>
+
+							<!-- № Заявки -->
+							<TextBox Text="{Binding FilterRequestNumber}" Watermark="№ заявки"
+									 Background="#d1ffef" BorderBrush="#333"
+									 VerticalAlignment="Center" VerticalContentAlignment="Center"
+									 Margin="5" Padding="5" Height="28"
+									 FontSize="12" Foreground="#666"/>
+
+							<!-- Кнопка для открытия фильтра пациента -->
+							<Button Grid.Column="1" Name="TogglePatientFilterButton" Content="Фильтр пациента" 
+									Click="TogglePatientFilter_Click"
+									Background="#d1ffef" BorderBrush="#333" Margin="5" Padding="5"
+									FontSize="12" VerticalAlignment="Center" VerticalContentAlignment="Center"
+									Height="28"/>
+
+
+							<!-- Кнопка Приоритет -->
+							<Button Grid.Column="2" Name="TogglePriorityFilterButton" Content="Выберите приоритет"
+									Click="TogglePriorityFilter_Click"
+									Background="#d1ffef" BorderBrush="#333" Margin="5" Padding="5"
+									FontSize="12" VerticalAlignment="Center" VerticalContentAlignment="Center"
+									Height="28"/>
+							<!-- Popup для Приоритета -->
+							<Popup Name="PriorityFilterPopup" PlacementMode="Bottom" PlacementTarget="{Binding #TogglePriorityFilterButton}">
+								<Border Background="#d1ffef" CornerRadius="4" Padding="10" BorderBrush="#333" BorderThickness="2"
+										Width="200" BoxShadow="0 4 12 #00000033">
+									<StackPanel>
+										<TextBlock Text="Выберите приоритет:" FontWeight="Bold" Foreground="#333" Margin="0,0,0,8" FontSize="12"/>
+										<ListBox ItemsSource="{Binding AvailablePriorities}" SelectionMode="Multiple" Height="120">
+											<ListBox.ItemTemplate>
+												<DataTemplate>
+													<CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}"/>
+												</DataTemplate>
+											</ListBox.ItemTemplate>
+										</ListBox>
+									</StackPanel>
+								</Border>
+							</Popup>
+
+							<!-- Кнопка Статус -->
+							<Button Grid.Column="3" Name="ToggleStatusFilterButton" Content="Выберите статус"
+									Click="ToggleStatusFilter_Click"
+									Background="#d1ffef" BorderBrush="#333" Margin="5" Padding="5"
+									FontSize="12" VerticalAlignment="Center" VerticalContentAlignment="Center"
+									Height="28"/>
+
+							<!-- Popup для Статуса -->
+							<Popup Name="StatusFilterPopup" PlacementMode="Bottom" PlacementTarget="{Binding #ToggleStatusFilterButton}">
+								<Border Background="#d1ffef" CornerRadius="4" Padding="10" BorderBrush="#333" BorderThickness="2"
+										Width="200" BoxShadow="0 4 12 #00000033">
+									<StackPanel>
+										<TextBlock Text="Выберите статус:" FontWeight="Bold" Foreground="#333" Margin="0,0,0,8" FontSize="12"/>
+										<ListBox ItemsSource="{Binding AvailableStatuses}" SelectionMode="Multiple" Height="150">
+											<ListBox.ItemTemplate>
+												<DataTemplate>
+													<CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+												</DataTemplate>
+											</ListBox.ItemTemplate>
+										</ListBox>
+									</StackPanel>
+								</Border>
+							</Popup>
+
+							<!-- Кнопка для выбора временного интервала -->
+							<Button Grid.Column="4" Name="ToggleDateRangeFilterButton" Content="{Binding FilterDateRangeDisplay}"
+									Background="#d1ffef" BorderBrush="#333" Margin="5" Padding="5"
+									FontSize="12" VerticalAlignment="Center" VerticalContentAlignment="Center"
+									Height="28"/>
+
+							<!-- Popup с календарём для выбора временного интервала -->
+							<Popup Name="DateRangeFilterPopup" PlacementMode="Bottom" PlacementTarget="{Binding #ToggleDateRangeFilterButton}">
+								<Border Background="#d1ffef" CornerRadius="4" Padding="15" BorderBrush="#333" BorderThickness="2"
+										Width="320" BoxShadow="0 4 12 #00000033">
+									<StackPanel>
+										<TextBlock Text="Выберите временной интервал:" FontWeight="Bold" Foreground="#333" Margin="0,0,0,10" FontSize="12"/>
+										<TextBlock Text="1. Нажмите на дату начала" Margin="0,0,0,5" Foreground="#333" FontSize="11"/>
+										<TextBlock Text="2. Нажмите на дату конца" Margin="0,0,0,10" Foreground="#333" FontSize="11"/>
+
+										<Calendar Name="DateRangePickerCalendar" Background="White" Margin="0,0,0,10" SelectedDatesChanged="DateRangePickerCalendar_SelectedDatesChanged"/>
+
+										<StackPanel Spacing="10" Orientation="Horizontal">
+											<TextBlock Text="{Binding FilterDateRangeDisplay}" VerticalAlignment="Center" 
+													   Foreground="#333" FontSize="11" Margin="0"/>
+											<Button Content="Очистить" Click="ClearDateRange_Click"
+													Background="#FF5252" Foreground="White" Padding="8,4" FontSize="11"/>
+										</StackPanel>
+												</StackPanel>
+											</Border>
+										</Popup>
+									</Grid>
+
+						<!-- Popup с полями фильтрации пациента -->
+						<Popup Name="PatientFilterPopup" PlacementMode="Bottom" PlacementTarget="{Binding #TogglePatientFilterButton}">
+							<Border Background="#d1ffef" CornerRadius="4" Padding="15" BorderBrush="#333" BorderThickness="2" 
+									Width="350" BoxShadow="0 4 12 #00000033">
+								<StackPanel>
+									<TextBlock Text="Фильтр данных пациента:" FontWeight="Bold" Foreground="#333" Margin="0,0,0,10"/>
+
+									<TextBlock Text="Фамилия:" Margin="0,5,0,2" Foreground="#333" FontSize="12"/>
+									<TextBox Name="SurnameFilter" Watermark="Введите фамилию" Background="White" BorderBrush="#333" Margin="0,0,0,10" Padding="5" FontSize="12" 
+											 Text="{Binding FilterPatient}"/>
+
+									<TextBlock Text="Имя:" Margin="0,5,0,2" Foreground="#333" FontSize="12"/>
+									<TextBox Name="FirstNameFilter" Watermark="Введите имя" Background="White" BorderBrush="#333" Margin="0,0,0,10" Padding="5" FontSize="12"/>
+
+									<TextBlock Text="Отчество:" Margin="0,5,0,2" Foreground="#333" FontSize="12"/>
+									<TextBox Name="PatronymicFilter" Watermark="Введите отчество" Background="White" BorderBrush="#333" Margin="0,0,0,10" Padding="5" FontSize="12"/>
+
+									<TextBlock Text="Номер телефона:" Margin="0,5,0,2" Foreground="#333" FontSize="12"/>
+									<TextBox Name="PhoneFilter" Watermark="Введите номер телефона" Background="White" BorderBrush="#333" Margin="0,0,0,10" Padding="5" FontSize="12"
+											 Text="{Binding FilterPhone}"/>
+
+									<TextBlock Text="Адрес:" Margin="0,5,0,2" Foreground="#333" FontSize="12"/>
+									<TextBox Name="AddressFilter" Watermark="Введите адрес" Background="White" BorderBrush="#333" Margin="0,0,0,10" Padding="5" FontSize="12"/>
+
+									<TextBlock Text="Email:" Margin="0,5,0,2" Foreground="#333" FontSize="12"/>
+									<TextBox Name="EmailFilter" Watermark="Введите email" Background="White" BorderBrush="#333" Margin="0,0,0,0" Padding="5" FontSize="12"/>
+								</StackPanel>
+							</Border>
+						</Popup>
+					</StackPanel>
+				</Border>
+
+				<!-- Calls Table -->
+				<ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<ItemsControl ItemsSource="{Binding RequestRows}" HorizontalAlignment="Stretch">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel Spacing="5" HorizontalAlignment="Stretch"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate DataType="vm:RequestRow">
+								<Expander HorizontalContentAlignment="Stretch" BorderThickness="0" 
+										 Background="#ffffff" Padding="0" Margin="0,0,0,3" HorizontalAlignment="Stretch">
+									<Expander.Header>
+										<Grid Background="#ecfff8" Height="50" HorizontalAlignment="Stretch">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="1*" SharedSizeGroup="Col0"/>
+												<ColumnDefinition Width="2*" SharedSizeGroup="Col1"/>
+												<ColumnDefinition Width="1*" SharedSizeGroup="Col2"/>
+												<ColumnDefinition Width="1*" SharedSizeGroup="Col3"/>
+												<ColumnDefinition Width="1*" SharedSizeGroup="Col4"/>
+											</Grid.ColumnDefinitions>
+
+											<!-- Номер заявки -->
+											<TextBlock Text="{Binding CallId}" Foreground="#FF5252" FontWeight="Bold" Margin="10,0"
+													   VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+											<!-- ФИО + Телефон (клик открывает детали) -->
+											<StackPanel Grid.Column="1" Margin="10,5" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+												<TextBlock Text="{Binding FullName}" FontWeight="Bold" Foreground="#333" TextTrimming="CharacterEllipsis"/>
+												<TextBlock Text="{Binding Phone}" FontSize="11" Foreground="#999" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
+											</StackPanel>
+
+											<!-- Приоритет -->
+											<Border Grid.Column="2" CornerRadius="4" Padding="5,2" Margin="10,5" Background="#FF5252" HorizontalAlignment="Center" VerticalAlignment="Center">
+												<TextBlock Text="{Binding Priority}" Foreground="White" FontSize="12" TextAlignment="Center"
+														   VerticalAlignment="Center"/>
+											</Border>
+
+											<!-- Статус -->
+											<Border Grid.Column="3" CornerRadius="4" Padding="5,2" Margin="10,5" Background="#4CAF50" HorizontalAlignment="Center" VerticalAlignment="Center">
+												<TextBlock Text="{Binding Status}" Foreground="White" FontSize="12" TextAlignment="Center"
+														   VerticalAlignment="Center"/>
+											</Border>
+
+											<!-- Время -->
+											<TextBlock Grid.Column="4" Text="{Binding Time}" Margin="10,0"
+													   VerticalAlignment="Center" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
+										</Grid>
+									</Expander.Header>
+
+									<!-- Детали (выпадающее содержимое) -->
+									<Border Background="White" Padding="15" Margin="0">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="Auto"/>
+												<ColumnDefinition Width="*"/>
+											</Grid.ColumnDefinitions>
+											<Grid.RowDefinitions>
+												<RowDefinition Height="Auto"/>
+												<RowDefinition Height="Auto"/>
+												<RowDefinition Height="Auto"/>
+												<RowDefinition Height="Auto"/>
+											</Grid.RowDefinitions>
+
+											<TextBlock Text="Email:" FontWeight="Bold" Foreground="#333" Margin="0,0,10,0"/>
+											<TextBlock Grid.Column="1" Text="{Binding Email}" Foreground="#555" TextWrapping="Wrap"/>
+
+											<TextBlock Grid.Row="1" Text="Цель обращения:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
+											<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AppealPurpose}" Foreground="#555" 
+													   Margin="0,10,0,0" TextWrapping="Wrap"/>
+
+											<TextBlock Grid.Row="2" Text="Анамнез:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
+											<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Anamnesis}" Foreground="#555" 
+													   Margin="0,10,0,0" TextWrapping="Wrap"/>
+
+											<TextBlock Grid.Row="3" Text="Жалобы:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
+											<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Complaints}" Foreground="#555" 
+													   Margin="0,10,0,0" TextWrapping="Wrap"/>
+										</Grid>
+									</Border>
+								</Expander>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Grid>
+		</Border>
+	</Grid>
 </UserControl>
