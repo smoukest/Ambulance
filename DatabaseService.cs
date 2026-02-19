@@ -103,10 +103,10 @@ namespace Ambulance
                                  List<string> _status, DateTime? _dateStart, DateTime? _dateEnd)
         {
             /*string request = @"
-                SELECT 
+                SELECT DISTINCT
                     p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email,
-                    p.anamnesis, p.complaints, 
-                    c.appeal_purpose, c.priority, c.call_id, c.time
+                    p.anamnesis, p.complaints,
+                    c.appeal_purpose, c.priority, c.call_id, c.time, c.status
                 FROM patients AS p
                 INNER JOIN calls AS c ON p.patient_id = c.patient_id
                 WHERE 
@@ -117,7 +117,8 @@ namespace Ambulance
                     (p.address = @address OR @address IS NULL) AND
                     (p.email = @email OR @email IS NULL) AND
                     (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
-                    (c.priority = @priority OR @priority IS NULL);";*/
+                    (c.priority = @priority OR @priority IS NULL)
+                    ORDER BY p.patient_id DESC;";*/
             string request = @"
                 SELECT DISTINCT
                     p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email,

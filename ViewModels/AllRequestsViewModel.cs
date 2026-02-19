@@ -44,6 +44,12 @@ namespace Ambulance.ViewModels
         public string FilterDateRangeDisplay { get; set; } = "Выберите период";
 
         [Reactive]
+        public string FilterDateStartDisplay { get; set; } = "";
+
+        [Reactive]
+        public string FilterDateEndDisplay { get; set; } = "";
+
+        [Reactive]
         public string FilterBrigade { get; set; } = "";
 
         // Коллекции для выбранных фильтров
@@ -337,3 +343,4 @@ namespace Ambulance.ViewModels
         public string FullName => $"{Surname} {Name} {Patronymic}".Trim();
     }
 }
+        
