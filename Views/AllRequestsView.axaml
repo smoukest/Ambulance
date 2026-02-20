@@ -6,7 +6,8 @@
 			 x:DataType="vm:AllRequestsViewModel">
 
 	<UserControl.Resources>
-		<local:PriorityToColorConverter x:Key="PriorityToColorConverter"/>
+      <local:PriorityToColorConverter x:Key="PriorityToColorConverter"/>
+		<local:StringNotEmptyToVisibilityConverter x:Key="StringNotEmptyToVisibilityConverter"/>
 	</UserControl.Resources>
 
 	<Grid Background="#32d1b4">
@@ -268,32 +269,48 @@
 
 									<!-- Детали (выпадающее содержимое) -->
 									<Border Background="White" Padding="15" Margin="0">
-										<Grid>
+                                        <Grid>
 											<Grid.ColumnDefinitions>
 												<ColumnDefinition Width="Auto"/>
 												<ColumnDefinition Width="*"/>
 											</Grid.ColumnDefinitions>
-											<Grid.RowDefinitions>
-												<RowDefinition Height="Auto"/>
-												<RowDefinition Height="Auto"/>
-												<RowDefinition Height="Auto"/>
-												<RowDefinition Height="Auto"/>
-											</Grid.RowDefinitions>
+               <Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
 
-											<TextBlock Text="Email:" FontWeight="Bold" Foreground="#333" Margin="0,0,10,0"/>
-											<TextBlock Grid.Column="1" Text="{Binding Email}" Foreground="#555" TextWrapping="Wrap"/>
+											<TextBlock Text="ID Пациента:" FontWeight="Bold" Foreground="#333" Margin="0,0,10,0"/>
+											<TextBlock Grid.Column="1" Text="{Binding PatientId}" Foreground="#555" TextWrapping="Wrap"/>
 
-											<TextBlock Grid.Row="1" Text="Цель обращения:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
-											<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AppealPurpose}" Foreground="#555" 
-													   Margin="0,10,0,0" TextWrapping="Wrap"/>
+              <TextBlock Grid.Row="1" Text="Email:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0" IsVisible="{Binding Email, Converter={StaticResource StringNotEmptyToVisibilityConverter}}"/>
+				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Email}" Foreground="#555" Margin="0,10,0,0" TextWrapping="Wrap" IsVisible="{Binding Email, Converter={StaticResource StringNotEmptyToVisibilityConverter}}"/>
 
-											<TextBlock Grid.Row="2" Text="Анамнез:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
-											<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Anamnesis}" Foreground="#555" 
-													   Margin="0,10,0,0" TextWrapping="Wrap"/>
+				<TextBlock Grid.Row="2" Text="Адрес:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
+				<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Address}" Foreground="#555" Margin="0,10,0,0" TextWrapping="Wrap"/>
 
-											<TextBlock Grid.Row="3" Text="Жалобы:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
-											<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Complaints}" Foreground="#555" 
-													   Margin="0,10,0,0" TextWrapping="Wrap"/>
+				<TextBlock Grid.Row="3" Text="Дата рождения:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0" IsVisible="{Binding BirthDate, Converter={StaticResource StringNotEmptyToVisibilityConverter}}"/>
+				<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding BirthDate}" Foreground="#555" Margin="0,10,0,0" TextWrapping="Wrap" IsVisible="{Binding BirthDate, Converter={StaticResource StringNotEmptyToVisibilityConverter}}"/>
+
+				<TextBlock Grid.Row="4" Text="Пол:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0" IsVisible="{Binding Gender, Converter={StaticResource StringNotEmptyToVisibilityConverter}}"/>
+				<TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Gender}" Foreground="#555" Margin="0,10,0,0" TextWrapping="Wrap" IsVisible="{Binding Gender, Converter={StaticResource StringNotEmptyToVisibilityConverter}}"/>
+
+				<TextBlock Grid.Row="5" Text="Цель обращения:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
+				<TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding AppealPurpose}" Foreground="#555" 
+					   Margin="0,10,0,0" TextWrapping="Wrap"/>
+
+				<TextBlock Grid.Row="6" Text="Анамнез:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
+				<TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Anamnesis}" Foreground="#555" 
+					   Margin="0,10,0,0" TextWrapping="Wrap"/>
+
+				<TextBlock Grid.Row="7" Text="Жалобы:" FontWeight="Bold" Foreground="#333" Margin="0,10,10,0"/>
+				<TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Complaints}" Foreground="#555" 
+					   Margin="0,10,0,0" TextWrapping="Wrap"/>
 										</Grid>
 									</Border>
 								</Expander>

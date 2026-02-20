@@ -50,7 +50,7 @@ namespace Ambulance.ViewModels
         public string FilterDateEndDisplay { get; set; } = "";
 
         [Reactive]
-        public string FilterBrigade { get; set; } = "";
+        public string FilterBrigade { get; set; } = "Все";
 
         // Коллекции для выбранных фильтров
         [Reactive]
@@ -239,7 +239,9 @@ namespace Ambulance.ViewModels
                         CallId = colCount > 11 ? patients[i, 11] : "",
                         Time = colCount > 12 ? patients[i, 12] : "",
                         Status = colCount > 13 ? patients[i, 13] : "",
-                        VisitId = colCount > 14 ? patients[i, 14] : ""
+                        BirthDate = colCount > 14 ? patients[i, 14] : "",
+                        Gender = colCount > 15 ? patients[i, 15] : "",
+                        VisitId = ""
                     };
 
                     RequestRows.Add(row);
@@ -336,6 +338,12 @@ namespace Ambulance.ViewModels
 
         [Reactive]
         public string Status { get; set; }
+
+        [Reactive]
+        public string BirthDate { get; set; }
+
+        [Reactive]
+        public string Gender { get; set; }
 
         [Reactive]
         public string VisitId { get; set; }
