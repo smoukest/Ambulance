@@ -69,38 +69,48 @@ namespace Ambulance
         public void CreatePatient(string name, string surname, string patronymic,
                                  string phoneNumber, string address,
                                  string email, string anamnesis,
-                                 string complaints, string status)
+                                 string complaints, string status,
+                                 string birthDate, string gender)
         {
-            int[] info = new int[2];
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
 
+                // Используем параметризованный запрос чтобы избежать SQL-инъекций
+                using (var cmd = new NpgsqlCommand(
+                    "INSERT INTO patients (name, surname, patronymic, phone_number, address, email, anamnesis, complaints, birth_date, gender) " +
+                    "VALUES (@name, @surname, @patronymic, @phone_number, @address, @email, @anamnesis, @complaints, @birth_date, @gender)", connection))
+                {
+                    cmd.Parameters.AddWithValue("name", NpgsqlDbType.Varchar, name ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("surname", NpgsqlDbType.Varchar, surname ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("patronymic", NpgsqlDbType.Varchar, patronymic ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("phone_number", NpgsqlDbType.Varchar, phoneNumber ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("address", NpgsqlDbType.Varchar, address ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("email", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(email) ? (object)DBNull.Value : email);
+                    cmd.Parameters.AddWithValue("anamnesis", NpgsqlDbType.Varchar, anamnesis ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("complaints", NpgsqlDbType.Varchar, complaints ?? (object)DBNull.Value);
 
-                using (var create = new NpgsqlCommand($"INSERT INTO patients (name, surname, patronymic, phone_number, address, email, anamnesis)" +
-                    $" VALUES ('{name}', '{surname}', '{patronymic}', '{phoneNumber}', '{address}', '{email}', '{anamnesis}')", connection))
-                    if (create.ExecuteNonQuery() < 0)
-                        throw new Exception("Неверно введены данные.");
+                    // birth_date ожидается как date или timestamp в БД. Если передана пустая строка, сохраняем NULL.
+                    if (!string.IsNullOrWhiteSpace(birthDate) && DateTime.TryParse(birthDate, out var bd))
+                        cmd.Parameters.AddWithValue("birth_date", NpgsqlDbType.Timestamp, bd);
+                    else
+                        cmd.Parameters.AddWithValue("birth_date", NpgsqlDbType.Timestamp, DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("gender", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(gender) ? (object)DBNull.Value : gender);
+
+                    LogQuery(cmd, nameof(CreatePatient));
+
+                    if (cmd.ExecuteNonQuery() <= 0)
+                        throw new Exception("Неверно введены данные при создании пациента.");
+                }
             }
         }
 
-        public void DeleteClient(int id, int key)
-        {
-            int[] info = new int[2];
-            using (var connection = new NpgsqlConnection(_connectionString))
-            {
-                connection.Open();
-
-                using (var create = new NpgsqlCommand($"DELETE FROM clients WHERE id_client={id} AND delete_key={key}", connection))
-                    if (create.ExecuteNonQuery() < 0)
-                        throw new Exception("Неверно введены данные.");
-            }
-        }
 
         public string[,] GetAllPatient(string _name, string _surname, string _patronymic,
                                  string _phoneNumber, string _address, string _email,
-                                 string _appealPurpose, string _priority, string _id,
-                                 List<string> _status, DateTime? _dateStart, DateTime? _dateEnd)
+                                 string _appealPurpose, List<string> _priorities, string _id,
+                                 List<string> _status, string _gender, DateTime? _dateStart, DateTime? _dateEnd)
         {
             /*string request = @"
                 SELECT DISTINCT
@@ -114,17 +124,31 @@ namespace Ambulance
                     (p.surname = @surname OR @surname IS NULL) AND
                     (p.patronymic = @patronymic OR @patronymic IS NULL) AND
                     (p.phone_number = @phone_number OR @phone_number IS NULL) AND
-                    (p.address = @address OR @address IS NULL) AND
+                    (p.address ILIKE @address OR @address IS NULL) AND
                     (p.email = @email OR @email IS NULL) AND
                     (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
                     (c.priority = @priority OR @priority IS NULL)
                     ORDER BY p.patient_id DESC;";*/
-            string request = @"
+                string request = @"
                 SELECT DISTINCT
-                    p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email, p.anamnesis, 
+                    p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email, p.anamnesis,
                     c.complaints, c.appeal_purpose, c.priority, c.call_id, c.time, c.status, p.birth_date, p.gender
                 FROM patients AS p
                 INNER JOIN calls AS c ON p.patient_id = c.patient_id
+                WHERE 
+                    (p.name = @name OR @name IS NULL) AND
+                    (p.surname = @surname OR @surname IS NULL) AND
+                    (p.patronymic = @patronymic OR @patronymic IS NULL) AND
+                    (p.phone_number = @phone_number OR @phone_number IS NULL) AND
+                    (p.address = @address OR @address IS NULL) AND
+                    (p.email = @email OR @email IS NULL) AND
+                    (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
+                    (@priorities IS NULL OR c.priority = ANY(@priorities)) AND
+                    (c.call_id = @call_id OR @call_id IS NULL) AND
+                    (@status IS NULL OR c.status = ANY(@status)) AND
+                    (p.gender = @gender OR @gender IS NULL) AND
+                    (@date_start IS NULL OR c.time >= @date_start) AND
+                    (@date_end IS NULL OR c.time <= @date_end)
                 ORDER BY p.patient_id DESC;";
             //string[] requestPartsNames = { "name", "surname", "patronymic", "phoneNumber", "address", "email" };
             //string[] requestParts = { $"{_name}", $"{_surname}", $"{_patronymic}", $"{_phoneNumber}", $"{_address}", $"{_email}" };
@@ -160,14 +184,48 @@ namespace Ambulance
 
                 using (var requestDB = new NpgsqlCommand(request, connection))
                 {
-                    requestDB.Parameters.AddWithValue("name", NpgsqlDbType.Varchar, _name ?? (object)DBNull.Value);
-                    requestDB.Parameters.AddWithValue("surname", NpgsqlDbType.Varchar, _surname ?? (object)DBNull.Value);
-                    requestDB.Parameters.AddWithValue("patronymic", NpgsqlDbType.Varchar, _patronymic ?? (object)DBNull.Value);
-                    requestDB.Parameters.AddWithValue("phone_number", NpgsqlDbType.Varchar, "" ?? (object)DBNull.Value);
-                    requestDB.Parameters.AddWithValue("address", NpgsqlDbType.Varchar, _address ?? (object)DBNull.Value);
-                    requestDB.Parameters.AddWithValue("email", NpgsqlDbType.Varchar, _email ?? (object)DBNull.Value);
-                    requestDB.Parameters.AddWithValue("appeal_purpose", NpgsqlDbType.Varchar, _appealPurpose ?? (object)DBNull.Value);
-                    requestDB.Parameters.AddWithValue("priority", NpgsqlDbType.Varchar, _priority ?? (object)DBNull.Value);
+                    requestDB.Parameters.AddWithValue("name", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_name) ? (object)DBNull.Value : _name);
+                    requestDB.Parameters.AddWithValue("surname", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_surname) ? (object)DBNull.Value : _surname);
+                    requestDB.Parameters.AddWithValue("patronymic", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_patronymic) ? (object)DBNull.Value : _patronymic);
+                    requestDB.Parameters.AddWithValue("phone_number", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_phoneNumber) ? (object)DBNull.Value : _phoneNumber);
+                    if (string.IsNullOrWhiteSpace(_address))
+                        requestDB.Parameters.AddWithValue("address", NpgsqlDbType.Varchar, DBNull.Value);
+                    else
+                        requestDB.Parameters.AddWithValue("address", NpgsqlDbType.Varchar, $"%{_address}%");
+                    requestDB.Parameters.AddWithValue("email", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_email) ? (object)DBNull.Value : _email);
+                    requestDB.Parameters.AddWithValue("appeal_purpose", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_appealPurpose) ? (object)DBNull.Value : _appealPurpose);
+
+                    // priorities: pass array or NULL
+                    if (_priorities == null || _priorities.Count == 0)
+                        requestDB.Parameters.AddWithValue("priorities", NpgsqlDbType.Array | NpgsqlDbType.Varchar, DBNull.Value);
+                    else
+                        requestDB.Parameters.AddWithValue("priorities", NpgsqlDbType.Array | NpgsqlDbType.Varchar, _priorities.ToArray());
+
+                    // gender filter
+                    requestDB.Parameters.AddWithValue("gender", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_gender) ? (object)DBNull.Value : _gender);
+
+                    // call id filter (expects numeric id or null)
+                    if (string.IsNullOrWhiteSpace(_id) || !int.TryParse(_id, out var callId))
+                        requestDB.Parameters.AddWithValue("call_id", NpgsqlDbType.Integer, DBNull.Value);
+                    else
+                        requestDB.Parameters.AddWithValue("call_id", NpgsqlDbType.Integer, callId);
+
+                    // status list: pass array or NULL
+                    if (_status == null || _status.Count == 0)
+                        requestDB.Parameters.AddWithValue("status", NpgsqlDbType.Array | NpgsqlDbType.Varchar, DBNull.Value);
+                    else
+                        requestDB.Parameters.AddWithValue("status", NpgsqlDbType.Array | NpgsqlDbType.Varchar, _status.ToArray());
+
+                    // date range
+                    if (_dateStart.HasValue)
+                        requestDB.Parameters.AddWithValue("date_start", NpgsqlDbType.Timestamp, _dateStart.Value);
+                    else
+                        requestDB.Parameters.AddWithValue("date_start", NpgsqlDbType.Timestamp, DBNull.Value);
+
+                    if (_dateEnd.HasValue)
+                        requestDB.Parameters.AddWithValue("date_end", NpgsqlDbType.Timestamp, _dateEnd.Value);
+                    else
+                        requestDB.Parameters.AddWithValue("date_end", NpgsqlDbType.Timestamp, DBNull.Value);
 
                     LogQuery(requestDB, nameof(GetAllPatient));
                     using (var patientsDB = requestDB.ExecuteReader())

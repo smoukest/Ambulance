@@ -29,6 +29,15 @@ namespace Ambulance.ViewModels
         public string FilterPhone { get; set; } = "";
 
         [Reactive]
+        public string FilterAddress { get; set; } = "";
+
+        [Reactive]
+        public string FilterEmail { get; set; } = "";
+
+        [Reactive]
+        public string FilterGender { get; set; } = "";
+
+        [Reactive]
         public string FilterAppealPurpose { get; set; } = "";
 
         [Reactive]
@@ -176,21 +185,19 @@ namespace Ambulance.ViewModels
                     .Select(s => s.Name)
                     .ToList();
 
-                // Преобразуем список выбранных приоритетов в строку для фильтрации
-                string priorityFilter = selectedPriorities.Count > 0 ? selectedPriorities[0] : "";
-
                 // Запрашиваем данные из БД с ВСЕ фильтрами
                 string[,] patients = _dt.GetAllPatient(
                     name,                              // name
                     surname,                           // surname
                     patronymic,                        // patronymic
                     FilterPhone,                       // phone number
-                    "",                                // address
-                    "",                                // email
+                    FilterAddress,                     // address
+                    FilterEmail,                       // email
                     FilterAppealPurpose,               // appeal purpose
-                    priorityFilter,                    // priority
+                    selectedPriorities,                // priorities (multiple)
                     FilterRequestNumber,               // call id
                     selectedStatuses,                  // selected statuses
+                    FilterGender,                      // gender
                     FilterDateStart,                   // date start
                     FilterDateEnd                      // date end
                 );

@@ -4,103 +4,74 @@
    
     <Grid Background="#32d1b4">
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="300"/>
+          <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <!-- Registration Form -->
-        <Border Grid.Column="0" Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5">
-          <StackPanel>
+        <!-- Registration Form: пациент + параметры обращения -->
+        <Border Grid.Column="0" Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5" HorizontalAlignment="Stretch">
+          <StackPanel HorizontalAlignment="Stretch">
             <TextBlock Text="Регистрация новой заявки" FontSize="20" FontWeight="Bold" 
-                       Foreground="Black" Margin="0,0,0,20" />
-        
-            <Grid Margin="0,10" ColumnDefinitions="*,*">
+                       Foreground="Black" Margin="0,0,0,8" />
+            
+
+            <Grid Margin="0,4" ColumnDefinitions="*,*" HorizontalAlignment="Stretch">
               <TextBox Grid.Column="0" Watermark="Номер телефона" 
-                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
-                       Margin="0,0,10,0" Name="PhoneNumber"/>
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="32" 
+                       Margin="0,0,8,0" Name="PhoneNumber"/>
               <TextBox Grid.Column="1" Watermark="Электронная почта"
-                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" Name="Email"/>
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="32" Name="Email"/>
             </Grid>
-        
-            <Grid Margin="0,10" ColumnDefinitions="*,*,*">
+
+            <Grid Margin="0,4" ColumnDefinitions="*,*,*" HorizontalAlignment="Stretch">
               <TextBox Grid.Column="0" Watermark="Фамилия" 
-                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
-                       Margin="0,0,5,0" Name="Surname"/>
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="32" 
+                       Margin="0,0,4,0" Name="Surname"/>
               <TextBox Grid.Column="1" Watermark="Имя"
-                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
-                       Margin="0,0,5,0" Name="Name"/>
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="32" 
+                       Margin="0,0,4,0" Name="Name"/>
               <TextBox Grid.Column="2" Watermark="Отчество" Name="Patronymic"
-                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40"/>
+                       Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="32"/>
             </Grid>
-        
+
+            <Grid Margin="0,4" ColumnDefinitions="3*,*" HorizontalAlignment="Stretch">
+                <TextBox Grid.Column="0" Watermark="Дата рождения (дд.мм.гггг)" 
+                         Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="32" 
+                         Margin="0,0,8,0" Name="BirthDate" HorizontalAlignment="Stretch"/>
+                <ComboBox Grid.Column="1" Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="32"
+                          Name="Gender" PlaceholderText="Пол" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="Мужской"/>
+                    <ComboBoxItem Content="Женский"/>
+                </ComboBox>
+            </Grid>
+
             <TextBox Watermark="Адрес проживания" 
-                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="40" 
-                     Margin="0,10,0,0" Name="Address"/>
-        
+                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="32" 
+                     Margin="0,4,0,0" Name="Address"/>
+
             <TextBox Watermark="Анамнез" 
-                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="100" 
-                     Margin="0,10,0,0" TextWrapping="Wrap" Name="Anamnesis"/>
-        
+                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="72" 
+                     Margin="0,4,0,0" TextWrapping="Wrap" Name="Anamnesis"/>
+
             <TextBox Watermark="Жалобы" 
-                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="100" 
-                     Margin="0,10,0,0" TextWrapping="Wrap" Name="Complaints"/>
-            <Grid Margin="0,10,0,0" ColumnDefinitions="*,*">
-                <ComboBox Grid.Column="0" Background="#ecfff8" Foreground="Black" Height="40" 
-                          PlaceholderText="Цель обращения" Name="AppealPurpose" Margin="0,0,10,0">
+                     Background="#ecfff8" Foreground="Black" BorderBrush="#333" Height="72" 
+                     Margin="0,4,0,0" TextWrapping="Wrap" Name="Complaints"/>
+            <Grid Margin="0,8,0,0" ColumnDefinitions="*,*">
+                <ComboBox Grid.Column="0" Background="#ecfff8" Foreground="Black" Height="32" 
+                          PlaceholderText="Цель обращения" Name="AppealPurpose" Margin="0,0,8,0">
                     <ComboBoxItem Content="Консультация"/>
                     <ComboBoxItem Content="Выезд"/>
                     <ComboBoxItem Content="Другая"/>
                 </ComboBox>
-        
+
                 <Button Grid.Column="1" Content="Зарегистрировать заявку" Background="#4CAF50" Foreground="Black" 
-                        Height="40" FontWeight="Bold" BorderBrush="Black" HorizontalAlignment="Right" Click="Registration_Click"/>
+                        Height="32" FontWeight="Bold" BorderBrush="Black" HorizontalAlignment="Right" Click="Registration_Click"/>
             </Grid>
             <Button Content="Очистить" Background="#FF5252" Foreground="Black" HorizontalAlignment="Right"
-                    Height="40" Margin="0,50,0,0" BorderBrush="Black" FontWeight="Bold" Click="Clear_Click"/>
+                    Height="32" Margin="0,16,0,0" BorderBrush="Black" FontWeight="Bold" Click="Clear_Click"/>
           </StackPanel>
         </Border>
 
-        <!-- Recent Requests -->
-        <Border Grid.Column="1" Background="#d1ffef" CornerRadius="8" Padding="20" Margin="5">
-          <StackPanel>
-            <TextBlock Text="Последние заявки" FontSize="18" FontWeight="Bold" 
-                       Foreground="Black" Margin="0,0,0,20"/>
+        <!-- Правая панель: краткая информация -->
         
-            <Border Background="#ecfff8" CornerRadius="4" Padding="10" Margin="0,0,0,10">
-              <StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                  <TextBlock Text="REQ-006" FontWeight="Bold" />
-                  <TextBlock Text="Средний" Background="#FF9800" Foreground="Black" 
-                             Padding="5,2" Margin="10,0"/>
-                </StackPanel>
-                <TextBlock Text="Морозова Ольга Петровна" FontWeight="Bold" Foreground="Black"/>
-                <TextBlock Text="Боль в животе, тошнота" Foreground="#BDBDBD" FontSize="12"/>
-                <TextBlock Text="г. Москва, ул. Новый Арбат, д. 30..." 
-                           Foreground="#BDBDBD" FontSize="12" Margin="0,5,0,0"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                  <TextBlock Text="5 минут назад" Foreground="#BDBDBD" FontSize="12"/>
-                </StackPanel>
-              </StackPanel>
-            </Border>
-        
-            <Border Background="#ecfff8" CornerRadius="4" Padding="10" Margin="0,0,0,10" >
-              <StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                  <TextBlock Text="REQ-003" FontWeight="Bold"/>
-                  <TextBlock Text="Средний" Background="#FF9800" Foreground="Black" 
-                             Padding="5,2" Margin="10,0"/>
-                </StackPanel>
-                <TextBlock Text="Козлов Алексей Викторович" FontWeight="Bold" Foreground="Black"/>
-                <TextBlock Text="Травма ноги после падения, отек" 
-                           Foreground="#BDBDBD" FontSize="12"/>
-                <TextBlock Text="г. Москва, ул. Тверская, д. 25, кв. 8" 
-                           Foreground="#BDBDBD" FontSize="12" Margin="0,5,0,0"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                  <TextBlock Text="8 минут назад" Foreground="#BDBDBD" FontSize="12"/>
-                </StackPanel>
-              </StackPanel>
-            </Border>
-          </StackPanel>
-        </Border>
       </Grid>
 </UserControl>

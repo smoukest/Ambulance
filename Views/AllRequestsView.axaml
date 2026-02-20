@@ -207,10 +207,12 @@
 											 Text="{Binding FilterPhone}"/>
 
 									<TextBlock Text="Адрес:" Margin="0,5,0,2" Foreground="#333" FontSize="12"/>
-									<TextBox Name="AddressFilter" Watermark="Введите адрес" Background="White" BorderBrush="#333" Margin="0,0,0,10" Padding="5" FontSize="12"/>
+                                    <TextBox Name="AddressFilter" Watermark="Введите адрес" Background="White" BorderBrush="#333" Margin="0,0,0,10" Padding="5" FontSize="12"
+											 Text="{Binding FilterAddress, Mode=TwoWay}"/>
 
 									<TextBlock Text="Email:" Margin="0,5,0,2" Foreground="#333" FontSize="12"/>
-									<TextBox Name="EmailFilter" Watermark="Введите email" Background="White" BorderBrush="#333" Margin="0,0,0,0" Padding="5" FontSize="12"/>
+                                    <TextBox Name="EmailFilter" Watermark="Введите email" Background="White" BorderBrush="#333" Margin="0,0,0,0" Padding="5" FontSize="12"
+											 Text="{Binding FilterEmail, Mode=TwoWay}"/>
 								</StackPanel>
 							</Border>
 						</Popup>

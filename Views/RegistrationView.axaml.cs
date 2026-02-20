@@ -29,6 +29,8 @@ public partial class RegistrationView : UserControl
         Address.Text = "";
         Anamnesis.Text = "";
         Complaints.Text = "";
+        BirthDate.Text = "";
+        Gender.SelectedIndex = -1;
         AppealPurpose.SelectedIndex = -1;
     }
 
@@ -42,6 +44,10 @@ public partial class RegistrationView : UserControl
             string phoneNumber = PhoneNumber.Text;
             string email = Email.Text;
             string address = Address.Text;
+            string birthDate = BirthDate.Text;
+            string gender = "";
+            var sel = Gender.SelectedItem as ComboBoxItem;
+            if (sel != null) gender = sel.Content?.ToString() ?? "";
             string anamnesis = Anamnesis.Text;
             string complaints = Complaints.Text;
             if (AppealPurpose.SelectedIndex == -1)
@@ -51,7 +57,7 @@ public partial class RegistrationView : UserControl
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(surname) || string.IsNullOrEmpty(patronymic) || string.IsNullOrEmpty(phoneNumber)
                  || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(anamnesis) || string.IsNullOrEmpty(complaints))
                 throw new Exception("Пожалуйста, заполните все поля ввода");
-            _dt.CreatePatient(name, surname, patronymic, phoneNumber, address, email, anamnesis, complaints, appealPurpose);
+            _dt.CreatePatient(name, surname, patronymic, phoneNumber, address, email, anamnesis, complaints, appealPurpose, birthDate, gender);
         }
         catch (Exception ex)
         {
