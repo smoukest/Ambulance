@@ -19,6 +19,11 @@ public partial class RegistrationView : UserControl
         _dt = new DatabaseService(connectionString);
     }
 
+    public void SetAddress(string address)
+    {
+        Address.Text = address;
+    }
+
     private void Clear_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         Name.Text = "";

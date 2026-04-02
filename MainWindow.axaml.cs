@@ -23,13 +23,24 @@ namespace Ambulance
             }
 
             _mapWindow = new MapWindow();
-            _mapWindow.Show(this);
+            _mapWindow.Show();
         }
 
         private void MainWindow_Closed(object? sender, EventArgs e)
         {
             _mapWindow?.Close();
             _mapWindow = null;
+        }
+
+        public void SetAddressFromMap(string address)
+        {
+            if (MainContent.Content is not RegistrationView registrationView)
+            {
+                Registration_Click(this, new Avalonia.Interactivity.RoutedEventArgs());
+                registrationView = MainContent.Content as RegistrationView;
+            }
+
+            registrationView?.SetAddress(address);
         }
 
         private void Registration_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
