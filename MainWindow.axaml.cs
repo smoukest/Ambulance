@@ -1,14 +1,35 @@
 using Ambulance.Views;
 using Avalonia.Controls;
+using System;
 
 namespace Ambulance
 {
     public partial class MainWindow : Window
     {
+        private MapWindow? _mapWindow;
         
         public MainWindow()
         {
             InitializeComponent();
+            Opened += MainWindow_Opened;
+            Closed += MainWindow_Closed;
+        }
+
+        private void MainWindow_Opened(object? sender, EventArgs e)
+        {
+            if (_mapWindow is { IsVisible: true })
+            {
+                return;
+            }
+
+            _mapWindow = new MapWindow();
+            _mapWindow.Show(this);
+        }
+
+        private void MainWindow_Closed(object? sender, EventArgs e)
+        {
+            _mapWindow?.Close();
+            _mapWindow = null;
         }
 
         private void Registration_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

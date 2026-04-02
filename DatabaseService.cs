@@ -139,8 +139,8 @@ namespace Ambulance
                     (p.name = @name OR @name IS NULL) AND
                     (p.surname = @surname OR @surname IS NULL) AND
                     (p.patronymic = @patronymic OR @patronymic IS NULL) AND
-                    (p.phone_number = @phone_number OR @phone_number IS NULL) AND
-                    (p.address = @address OR @address IS NULL) AND
+                    (p.phone_number LIKE @phone_number OR @phone_number IS NULL) AND
+                    (p.address LIKE @address OR @address IS NULL) AND
                     (p.email = @email OR @email IS NULL) AND
                     (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
                     (@priorities IS NULL OR c.priority = ANY(@priorities)) AND
@@ -192,7 +192,10 @@ namespace Ambulance
                         requestDB.Parameters.AddWithValue("address", NpgsqlDbType.Varchar, DBNull.Value);
                     else
                         requestDB.Parameters.AddWithValue("address", NpgsqlDbType.Varchar, $"%{_address}%");
-                    requestDB.Parameters.AddWithValue("email", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_email) ? (object)DBNull.Value : _email);
+                    if (string.IsNullOrWhiteSpace(_email))
+                        requestDB.Parameters.AddWithValue("email", NpgsqlDbType.Varchar, DBNull.Value);
+                    else
+                        requestDB.Parameters.AddWithValue("email", NpgsqlDbType.Varchar, $"{_address}%");
                     requestDB.Parameters.AddWithValue("appeal_purpose", NpgsqlDbType.Varchar, string.IsNullOrWhiteSpace(_appealPurpose) ? (object)DBNull.Value : _appealPurpose);
 
                     // priorities: pass array or NULL

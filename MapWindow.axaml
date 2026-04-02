@@ -1,0 +1,10 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mapsui="clr-namespace:Mapsui.UI.Avalonia;assembly=Mapsui.UI.Avalonia"
+        x:Class="Ambulance.MapWindow"
+        Width="900"
+        Height="700"
+        UseLayoutRounding="True"
+        Title="Карта Москвы">
+    <mapsui:MapControl x:Name="MapControl" RenderOptions.BitmapInterpolationMode="HighQuality"/>
+</Window>
