@@ -169,6 +169,16 @@ namespace Ambulance.Views
             }
         }
 
+        // Обработчик для кнопки фильтра цели обращения
+        public void ToggleAppealPurposeFilter_Click(object? sender, RoutedEventArgs e)
+        {
+            var popup = this.FindControl<Popup>("AppealPurposeFilterPopup");
+            if (popup != null)
+            {
+                popup.IsOpen = !popup.IsOpen;
+            }
+        }
+
         // Обработчик для кнопки фильтра даты
         public void ToggleDateRangeFilter_Click(object? sender, RoutedEventArgs e)
         {

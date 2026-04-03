@@ -69,6 +69,9 @@ namespace Ambulance.ViewModels
         public ObservableCollection<FilterItem> AvailableStatuses { get; set; }
 
         [Reactive]
+        public ObservableCollection<FilterItem> AvailableAppealPurposes { get; set; }
+
+        [Reactive]
         public ObservableCollection<FilterItem> SelectedPriorities { get; set; }
 
         [Reactive]
@@ -96,6 +99,13 @@ namespace Ambulance.ViewModels
                 new FilterItem { Name = "В работе", IsSelected = false },
                 new FilterItem { Name = "Завершена", IsSelected = false },
                 new FilterItem { Name = "Отменена", IsSelected = false }
+            };
+
+            AvailableAppealPurposes = new ObservableCollection<FilterItem>
+            {
+                new FilterItem { Name = "Консультация", IsSelected = false },
+                new FilterItem { Name = "Выезд", IsSelected = false },
+                new FilterItem { Name = "Другая", IsSelected = false }
             };
 
             SelectedPriorities = new ObservableCollection<FilterItem>();
@@ -135,6 +145,14 @@ namespace Ambulance.ViewModels
 
             // Следим за изменениями в выбранных статусах
             AvailableStatuses.CollectionChanged += (s, e) => 
+            {
+                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace && _isInitialized)
+                {
+                    RefreshRequests();
+                }
+            };
+
+            AvailableAppealPurposes.CollectionChanged += (s, e) =>
             {
                 if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace && _isInitialized)
                 {
@@ -185,6 +203,11 @@ namespace Ambulance.ViewModels
                     .Select(s => s.Name)
                     .ToList();
 
+                var selectedAppealPurposes = AvailableAppealPurposes
+                    .Where(a => a.IsSelected)
+                    .Select(a => a.Name)
+                    .ToList();
+
                 // Запрашиваем данные из БД с ВСЕ фильтрами
                 string[,] patients = _dt.GetAllPatient(
                     name,                              // name
@@ -193,7 +216,7 @@ namespace Ambulance.ViewModels
                     FilterPhone,                       // phone number
                     FilterAddress,                     // address
                     FilterEmail,                       // email
-                    FilterAppealPurpose,               // appeal purpose
+                    selectedAppealPurposes,            // appeal purposes (multiple)
                     selectedPriorities,                // priorities (multiple)
                     FilterRequestNumber,               // call id
                     selectedStatuses,                  // selected statuses
