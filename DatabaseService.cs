@@ -59,10 +59,17 @@ namespace Ambulance
             // Вывод в консоль
             Console.WriteLine(sb.ToString());
 
-            // Сохранение в файл (опционально)
-
-
-            File.AppendAllText("C:\\Users\\OSM\\OneDrive\\Desktop\\sql_debug.log", sb.ToString() + Environment.NewLine);
+            // Сохранение в файл на рабочий стол текущего пользователя
+            try
+            {
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string logPath = Path.Combine(desktopPath, "sql_debug.log");
+                File.AppendAllText(logPath, sb.ToString() + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при записи лога: {ex.Message}");
+            }
         }
 
 
