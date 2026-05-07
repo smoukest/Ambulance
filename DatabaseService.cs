@@ -17,11 +17,6 @@ namespace Ambulance
 {
     public class DatabaseService
     {
-        /*[ModuleInitializer]
-        public static void Initialize()
-        {
-            
-        }*/
         private readonly string _connectionString;
         private readonly bool _enableLogging = true;
 
@@ -31,7 +26,6 @@ namespace Ambulance
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
-
 
         // Метод для логирования запроса
         private void LogQuery(NpgsqlCommand cmd, string methodName)
@@ -84,8 +78,10 @@ namespace Ambulance
 
                 // Используем параметризованный запрос чтобы избежать SQL-инъекций
                 using (var cmd = new NpgsqlCommand(
-                    "INSERT INTO patients (name, surname, patronymic, phone_number, address, email, anamnesis, birth_date, gender) " +
-                    "VALUES (@name, @surname, @patronymic, @phone_number, @address, @email, @anamnesis, @birth_date, @gender) RETURNING patient_id", connection))
+                    "INSERT INTO patients (name, surname, patronymic, phone_number, " +
+                    "address, email, anamnesis, birth_date, gender) " +
+                    "VALUES (@name, @surname, @patronymic, @phone_number, @address, " +
+                    "@email, @anamnesis, @birth_date, @gender) RETURNING patient_id", connection))
                 {
                     cmd.Parameters.AddWithValue("name", NpgsqlDbType.Varchar, name ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("surname", NpgsqlDbType.Varchar, surname ?? (object)DBNull.Value);
@@ -152,23 +148,6 @@ namespace Ambulance
                                  List<string> _appealPurposes, List<string> _priorities, string _id,
                                  List<string> _status, string _gender, DateTime? _dateStart, DateTime? _dateEnd)
         {
-            /*string request = @"
-                SELECT DISTINCT
-                    p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email,
-                    p.anamnesis, p.complaints,
-                    c.appeal_purpose, c.priority, c.call_id, c.time, c.status
-                FROM patients AS p
-                INNER JOIN calls AS c ON p.patient_id = c.patient_id
-                WHERE 
-                    (p.name = @name OR @name IS NULL) AND
-                    (p.surname = @surname OR @surname IS NULL) AND
-                    (p.patronymic = @patronymic OR @patronymic IS NULL) AND
-                    (p.phone_number = @phone_number OR @phone_number IS NULL) AND
-                    (p.address ILIKE @address OR @address IS NULL) AND
-                    (p.email = @email OR @email IS NULL) AND
-                    (c.appeal_purpose = @appeal_purpose OR @appeal_purpose IS NULL) AND
-                    (c.priority = @priority OR @priority IS NULL)
-                    ORDER BY p.patient_id DESC;";*/
                 string request = @"
                 SELECT DISTINCT
                     p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email, p.anamnesis,
@@ -190,37 +169,10 @@ namespace Ambulance
                     (@date_start IS NULL OR c.time >= @date_start) AND
                     (@date_end IS NULL OR c.time <= @date_end)
                 ORDER BY p.patient_id DESC;";
-            //string[] requestPartsNames = { "name", "surname", "patronymic", "phoneNumber", "address", "email" };
-            //string[] requestParts = { $"{_name}", $"{_surname}", $"{_patronymic}", $"{_phoneNumber}", $"{_address}", $"{_email}" };
             string[,] patients = new string[50, 16];
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
-                /*int counterWHERE = 0;
-                for (int i = 0; i < requestParts.Length; i++)
-                {
-                    if (!string.IsNullOrEmpty(requestParts[i]))
-                    {
-                        if (counterWHERE == 0)
-                        {
-                            counterWHERE++;
-                            request += "WHERE p." + requestPartsNames[i] + $" = '{requestParts[i]}' ";
-                        }
-                        else
-                            request += "WHERE p." + requestPartsNames[i] + $" = '{requestParts[i]}' ";
-                    }
-                }
-
-                request += "INNER JOIN calls AS c ON p.patient_id = c.patient_id ";
-                if (!string.IsNullOrEmpty(_appealPurpose))
-                {
-                    request += "AND c.appeal_purpose = " + $"'{_appealPurpose}' ";
-                }
-                if (!string.IsNullOrEmpty(_priority))
-                {
-                    request += "AND c.priority = " + $"'{_priority}' ";
-                }
-                request += ';';*/
 
                 using (var requestDB = new NpgsqlCommand(request, connection))
                 {
