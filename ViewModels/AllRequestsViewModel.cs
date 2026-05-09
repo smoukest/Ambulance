@@ -170,7 +170,23 @@ namespace Ambulance.ViewModels
         /// <summary>
         /// Обновляет список заявок на основе текущих фильтров
         /// </summary>
+        private int _currentOffset = 0;
+        private const int PageSize = 20;
+
+        public void LoadMoreRequests()
+        {
+            if (IsLoading) return;
+            _currentOffset += PageSize;
+            LoadRequestsData(append: true);
+        }
+
         public void RefreshRequests()
+        {
+            _currentOffset = 0;
+            LoadRequestsData(append: false);
+        }
+
+        private void LoadRequestsData(bool append = false)
         {
             try
             {
@@ -222,13 +238,18 @@ namespace Ambulance.ViewModels
                     selectedStatuses,                  // selected statuses
                     FilterGender,                      // gender
                     FilterDateStart,                   // date start
-                    FilterDateEnd                      // date end
+                    FilterDateEnd,                     // date end
+                    PageSize,                          // limit
+                    _currentOffset                     // offset
                 );
 
                 System.Diagnostics.Debug.WriteLine($"GetAllPatient вернул массив: {patients?.Length ?? 0} элементов");
 
-                // Очищаем текущие строки перед добавлением новых
-                RequestRows.Clear();
+                if (!append)
+                {
+                    // Очищаем текущие строки перед добавлением новых
+                    RequestRows.Clear();
+                }
 
                 // Проверяем, что массив не пуст и имеет элементы
                 if (patients == null || patients.Length == 0)

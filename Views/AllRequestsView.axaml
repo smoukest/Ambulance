@@ -7,7 +7,8 @@
 			 x:DataType="vm:AllRequestsViewModel">
 
 	<UserControl.Resources>
-      <local:PriorityToColorConverter x:Key="PriorityToColorConverter"/>
+	  <local:PriorityToColorConverter x:Key="PriorityToColorConverter"/>
+	  <local:StatusToColorConverter x:Key="StatusToColorConverter"/>
 		<local:StringNotEmptyToVisibilityConverter x:Key="StringNotEmptyToVisibilityConverter"/>
 	</UserControl.Resources>
 
@@ -138,7 +139,10 @@
 										<ListBox ItemsSource="{Binding AvailableStatuses}" SelectionMode="Multiple" Background="Transparent" BorderThickness="0" Focusable="False">
 											<ListBox.ItemTemplate>
 												<DataTemplate>
-													<CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Focusable="False"/>
+													<StackPanel Orientation="Horizontal" Spacing="8">
+														<Border Background="{Binding Name, Converter={StaticResource StatusToColorConverter}}" CornerRadius="3" Width="16" Height="16" VerticalAlignment="Center"/>
+														<CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Focusable="False" VerticalAlignment="Center"/>
+													</StackPanel>
 												</DataTemplate>
 											</ListBox.ItemTemplate>
 										</ListBox>
@@ -250,7 +254,8 @@
 
 				<!-- Calls Table -->
 				<ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-				<ItemsControl ItemsSource="{Binding RequestRows}" HorizontalAlignment="Stretch">
+					<StackPanel>
+					<ItemsControl ItemsSource="{Binding RequestRows}" HorizontalAlignment="Stretch">
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
 								<StackPanel Spacing="5" HorizontalAlignment="Stretch"/>
@@ -288,7 +293,7 @@
 											</Border>
 
 											<!-- Статус -->
-											<Border Grid.Column="3" CornerRadius="4" Padding="5,2" Margin="10,5" Background="#4CAF50" HorizontalAlignment="Center" VerticalAlignment="Center">
+											<Border Grid.Column="3" CornerRadius="4" Padding="5,2" Margin="10,5" Background="{Binding Status, Converter={StaticResource StatusToColorConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center">
 												<TextBlock Text="{Binding Status}" Foreground="White" FontSize="12" TextAlignment="Center"
 														   VerticalAlignment="Center"/>
 											</Border>
@@ -353,6 +358,14 @@
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
+
+						<!-- Load More Button -->
+						<Button Content="Загрузить ещё 20 записей"
+								Click="LoadMore_Click"
+								Background="#ecfff8" Foreground="#333" BorderBrush="#333" BorderThickness="1"
+								Margin="0,15,0,0" Padding="15,8" HorizontalAlignment="Center"
+								FontWeight="Bold" IsEnabled="{Binding !IsLoading}"/>
+					</StackPanel>
 				</ScrollViewer>
 			</Grid>
 		</Border>

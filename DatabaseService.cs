@@ -146,10 +146,10 @@ namespace Ambulance
         public string[,] GetAllPatient(string _name, string _surname, string _patronymic,
                                  string _phoneNumber, string _address, string _email,
                                  List<string> _appealPurposes, List<string> _priorities, string _id,
-                                 List<string> _status, string _gender, DateTime? _dateStart, DateTime? _dateEnd)
+                                 List<string> _status, string _gender, DateTime? _dateStart, DateTime? _dateEnd, int limit = 20, int offset = 0)
         {
                 string request = @"
-                SELECT DISTINCT
+                SELECT 
                     p.patient_id, p.name, p.surname, p.patronymic, p.phone_number, p.address, p.email, p.anamnesis,
                     c.complaints, c.appeal_purpose, c.priority, c.call_id, c.time, c.status, p.birth_date, p.gender
                 FROM patients AS p
@@ -168,8 +168,14 @@ namespace Ambulance
                     (p.gender = @gender OR @gender IS NULL) AND
                     (@date_start IS NULL OR c.time >= @date_start) AND
                     (@date_end IS NULL OR c.time <= @date_end)
-                ORDER BY p.patient_id DESC;";
-            string[,] patients = new string[50, 16];
+                ORDER BY 
+                    CASE c.status 
+                        WHEN 'В работе' THEN 1 
+                        ELSE 2 
+                    END,
+                    c.time DESC
+                LIMIT @limit OFFSET @offset;";
+            string[,] patients = new string[limit, 16];
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
@@ -224,6 +230,9 @@ namespace Ambulance
                         requestDB.Parameters.AddWithValue("date_end", NpgsqlDbType.Timestamp, _dateEnd.Value);
                     else
                         requestDB.Parameters.AddWithValue("date_end", NpgsqlDbType.Timestamp, DBNull.Value);
+
+                    requestDB.Parameters.AddWithValue("limit", NpgsqlDbType.Integer, limit);
+                    requestDB.Parameters.AddWithValue("offset", NpgsqlDbType.Integer, offset);
 
                     LogQuery(requestDB, nameof(GetAllPatient));
                     using (var patientsDB = requestDB.ExecuteReader())

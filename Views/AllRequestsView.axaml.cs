@@ -212,6 +212,15 @@ namespace Ambulance.Views
             }
         }
 
+        // Обработчик для кнопки подгрузки дополнительных записей
+        public void LoadMore_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is AllRequestsViewModel vm)
+            {
+                vm.LoadMoreRequests();
+            }
+        }
+
         /// <summary>
         /// Получает hex-код цвета для приоритета по схеме:
         /// Экстренный - красный (#F44336)
@@ -248,6 +257,32 @@ namespace Ambulance.Views
                     "Ложный" => "#BDBDBD",          // Светло-серый
                     "Плановый" => "#4CAF50",        // Зелёный для плановых
                     _ => "#4CAF50"                  // Зелёный для других
+                };
+
+                return new SolidColorBrush(Color.Parse(colorCode));
+            }
+
+            return new SolidColorBrush(Color.Parse("#4CAF50"));
+        }
+
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class StatusToColorConverter : IValueConverter
+    {
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
+        {
+            if (value is string status)
+            {
+                string colorCode = status switch
+                {
+                    "Завершена" => "#4CAF50",      // Зеленый
+                    "В работе" => "#FF9800",       // Желтый/оранжевый
+                    "Отменена" => "#BDBDBD",       // Светло-серый
+                    _ => "#4CAF50"                 // По умолчанию зеленый
                 };
 
                 return new SolidColorBrush(Color.Parse(colorCode));
