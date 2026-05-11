@@ -265,5 +265,161 @@ namespace Ambulance
             }
             return patients;
         }
+
+        public (int TotalCalls, int CompletedToday, int InProgressCalls, int CriticalCalls) GetStatistics()
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string queryTotal = "SELECT COUNT(*) FROM calls";
+                using (var cmdTotal = new NpgsqlCommand(queryTotal, connection))
+                {
+                    int total = Convert.ToInt32(cmdTotal.ExecuteScalar());
+
+                    string queryCompletedToday = "SELECT COUNT(*) FROM calls WHERE status = 'Завершена' AND time::date = CURRENT_DATE";
+                    using (var cmdCompleted = new NpgsqlCommand(queryCompletedToday, connection))
+                    {
+                        int completedToday = Convert.ToInt32(cmdCompleted.ExecuteScalar());
+
+                        string queryInProgress = "SELECT COUNT(*) FROM calls WHERE status = 'В работе'";
+                        using (var cmdInProgress = new NpgsqlCommand(queryInProgress, connection))
+                        {
+                            int inProgress = Convert.ToInt32(cmdInProgress.ExecuteScalar());
+
+                            string queryCritical = "SELECT COUNT(*) FROM calls WHERE priority = 'Экстренный'";
+                            using (var cmdCritical = new NpgsqlCommand(queryCritical, connection))
+                            {
+                                int critical = Convert.ToInt32(cmdCritical.ExecuteScalar());
+
+                                return (total, completedToday, inProgress, critical);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public (Dictionary<string, int> CallsByStatus, Dictionary<string, int> CallsByPriority, Dictionary<int, int> CallsByHour, Dictionary<string, (int Total, int Completed)> CallsByDayOfWeek) GetChartsData(string hourlyPeriod = "День")
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                var byStatus = new Dictionary<string, int>();
+                var byPriority = new Dictionary<string, int>();
+                var byHour = new Dictionary<int, int>();
+                var byDayOfWeek = new Dictionary<string, (int Total, int Completed)>();
+
+                // Status chart data
+                string queryStatus = "SELECT status, COUNT(*) FROM calls GROUP BY status";
+                using (var cmdStatus = new NpgsqlCommand(queryStatus, connection))
+                using (var readerStatus = cmdStatus.ExecuteReader())
+                {
+                    while (readerStatus.Read())
+                    {
+                        string status = readerStatus.IsDBNull(0) ? "Неизвестно" : readerStatus.GetString(0);
+                        int count = readerStatus.GetInt32(1);
+                        byStatus[status] = count;
+                    }
+                }
+
+                // Priority chart data
+                string queryPriority = "SELECT priority, COUNT(*) FROM calls GROUP BY priority";
+                using (var cmdPriority = new NpgsqlCommand(queryPriority, connection))
+                using (var readerPriority = cmdPriority.ExecuteReader())
+                {
+                    while (readerPriority.Read())
+                    {
+                        string priority = readerPriority.IsDBNull(0) ? "Неизвестно" : readerPriority.GetString(0);
+                        int count = readerPriority.GetInt32(1);
+                        byPriority[priority] = count;
+                    }
+                }
+
+                // Hourly chart data (based on period)
+                string dateFilter = "time::date = CURRENT_DATE";
+                switch (hourlyPeriod)
+                {
+                    case "Неделя":
+                        dateFilter = "time >= CURRENT_DATE - INTERVAL '6 days'";
+                        break;
+                    case "Месяц":
+                        dateFilter = "time >= CURRENT_DATE - INTERVAL '1 month'";
+                        break;
+                    case "Год":
+                        dateFilter = "time >= CURRENT_DATE - INTERVAL '1 year'";
+                        break;
+                    case "Всё время":
+                        dateFilter = "1=1"; // no filter
+                        break;
+                    case "День":
+                    default:
+                        dateFilter = "time::date = CURRENT_DATE";
+                        break;
+                }
+
+                string queryHour = $@"
+                    SELECT EXTRACT(HOUR FROM time)::int AS h, COUNT(*) 
+                    FROM calls 
+                    WHERE {dateFilter} 
+                    GROUP BY h";
+                using (var cmdHour = new NpgsqlCommand(queryHour, connection))
+                using (var readerHour = cmdHour.ExecuteReader())
+                {
+                    // Initialize hours 0-23
+                    for (int i = 0; i < 24; i++) byHour[i] = 0;
+
+                    while (readerHour.Read())
+                    {
+                        if (!readerHour.IsDBNull(0))
+                        {
+                            int hour = readerHour.GetInt32(0);
+                            int count = readerHour.GetInt32(1);
+                            byHour[hour] = count;
+                        }
+                    }
+                }
+
+                // Weekly chart data
+                string queryWeekly = @"
+                    SELECT 
+                        EXTRACT(ISODOW FROM time)::int AS dow,
+                        COUNT(*) AS total,
+                        SUM(CASE WHEN status = 'Завершена' THEN 1 ELSE 0 END) AS completed
+                    FROM calls
+                    WHERE time >= CURRENT_DATE - INTERVAL '6 days'
+                    GROUP BY dow";
+
+                string[] dayNames = { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс" };
+
+                // Initialize week days
+                foreach(var d in dayNames)
+                {
+                    byDayOfWeek[d] = (0, 0);
+                }
+
+                using (var cmdWeekly = new NpgsqlCommand(queryWeekly, connection))
+                using (var readerWeekly = cmdWeekly.ExecuteReader())
+                {
+                    while (readerWeekly.Read())
+                    {
+                        if (!readerWeekly.IsDBNull(0))
+                        {
+                            int rawDow = readerWeekly.GetInt32(0); // 1 = Mon .. 7 = Sun
+                            if(rawDow >= 1 && rawDow <= 7)
+                            {
+                                string dayName = dayNames[rawDow - 1];
+                                int total = readerWeekly.GetInt32(1);
+                                int completed = readerWeekly.GetInt32(2);
+                                byDayOfWeek[dayName] = (total, completed);
+                            }
+                        }
+                    }
+                }
+
+                return (byStatus, byPriority, byHour, byDayOfWeek);
+            }
+        }
     }
 }
