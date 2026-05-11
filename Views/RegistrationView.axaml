@@ -66,8 +66,12 @@
                 <Button Grid.Column="1" Content="Зарегистрировать заявку" Background="#4CAF50" Foreground="Black" 
                         Height="32" FontWeight="Bold" BorderBrush="Black" HorizontalAlignment="Right" Click="Registration_Click"/>
             </Grid>
-            <Button Content="Очистить" Background="#FF5252" Foreground="Black" HorizontalAlignment="Right"
-                    Height="32" Margin="0,16,0,0" BorderBrush="Black" FontWeight="Bold" Click="Clear_Click"/>
+            <Grid Margin="0,16,0,0" ColumnDefinitions="*,Auto">
+                <Button Grid.Column="0" Content="Автозаполнение (Тест)" Background="#2196F3" Foreground="Black" HorizontalAlignment="Left"
+                        Height="32" BorderBrush="Black" FontWeight="Bold" Click="FillWithRandomData_Click"/>
+                <Button Grid.Column="1" Content="Очистить" Background="#FF5252" Foreground="Black" HorizontalAlignment="Right"
+                        Height="32" BorderBrush="Black" FontWeight="Bold" Click="Clear_Click"/>
+            </Grid>
 
             <Border Name="BrigadeAssignmentView"
                     IsVisible="False"

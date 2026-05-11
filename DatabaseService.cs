@@ -143,6 +143,24 @@ namespace Ambulance
         }
 
 
+        public void UpdateCallStatus(int callId, string newStatus)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                using (var cmd = new NpgsqlCommand(
+                    "UPDATE calls SET status = @status WHERE call_id = @call_id", connection))
+                {
+                    cmd.Parameters.AddWithValue("status", NpgsqlDbType.Varchar, newStatus);
+                    cmd.Parameters.AddWithValue("call_id", NpgsqlDbType.Integer, callId);
+
+                    LogQuery(cmd, nameof(UpdateCallStatus));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public string[,] GetAllPatient(string _name, string _surname, string _patronymic,
                                  string _phoneNumber, string _address, string _email,
                                  List<string> _appealPurposes, List<string> _priorities, string _id,

@@ -165,7 +165,46 @@ namespace Ambulance.ViewModels
 
             // Помечаем, что инициализация завершена
             _isInitialized = true;
+
+            // Автообновление при изменении значений фильтров
+            this.WhenAnyValue(x => x.FilterRequestNumber).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => RefreshRequests());
+            this.WhenAnyValue(x => x.FilterPatient).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => RefreshRequests());
+            this.WhenAnyValue(x => x.FilterPhone).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => RefreshRequests());
+            this.WhenAnyValue(x => x.FilterAppealPurpose).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => RefreshRequests());
+            this.WhenAnyValue(x => x.FilterDateStart).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => RefreshRequests());
+            this.WhenAnyValue(x => x.FilterDateEnd).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => RefreshRequests());
+            this.WhenAnyValue(x => x.FilterBrigade).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ => RefreshRequests());
         }
+
+        // --- ДОБАВЛЕНО ДЛЯ РЕДАКТИРОВАНИЯ СТАТУСА ---
+        public List<string> AvailableStatusStrings => new List<string> { "В работе", "Завершена", "Отменена" };
+
+        public void SaveStatus(RequestRow row)
+        {
+            if (row == null) return;
+            if (string.IsNullOrEmpty(row.CallId)) return;
+
+            // Если статус изменился, обновляем БД
+            if (row.Status != row.EditableStatus)
+            {
+                if (int.TryParse(row.CallId, out int callId))
+                {
+                    try
+                    {
+                        var dbService = new DatabaseService("Server=localhost;Port=5432;Username=postgres;Password=123;Database=amb;");
+                        dbService.UpdateCallStatus(callId, row.EditableStatus);
+                        
+                        // Сразу обновляем UI модель
+                        row.Status = row.EditableStatus;
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Ошибка при сохранении статуса: {ex.Message}");
+                    }
+                }
+            }
+        }
+        // ------------------------------------------
 
         /// <summary>
         /// Обновляет список заявок на основе текущих фильтров
@@ -387,8 +426,19 @@ namespace Ambulance.ViewModels
         [Reactive]
         public string Time { get; set; }
 
+        private string _status;
+        public string Status
+        {
+            get => _status;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _status, value);
+                EditableStatus = value;
+            }
+        }
+
         [Reactive]
-        public string Status { get; set; }
+        public string EditableStatus { get; set; }
 
         [Reactive]
         public string BirthDate { get; set; }
@@ -402,4 +452,3 @@ namespace Ambulance.ViewModels
         public string FullName => $"{Surname} {Name} {Patronymic}".Trim();
     }
 }
-        

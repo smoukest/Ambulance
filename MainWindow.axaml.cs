@@ -45,76 +45,77 @@ namespace Ambulance
 
         private void Registration_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            // Сбрасываем стили всех кнопок
+            // Сброс стилей всех кнопок
             ResetButtonStyles();
 
-            // Устанавливаем стиль для активной кнопки
+            // Установка стиля для активной кнопки
             var registrationButton = this.FindControl<Button>("RegistrationButton");
             registrationButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
             registrationButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
 
-            // Меняем контент на представление регистрации
+            // Метод класса для смены представления на «Регистрацию заявки»
             MainContent.Content = new RegistrationView();
         }
 
         private void Requests_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            // Сбрасываем стили всех кнопок
+            // Сброс стилей всех кнопок
             ResetButtonStyles();
 
-            // Устанавливаем стиль для активной кнопки
+            // Установка стиля для активной кнопки
             var requestsButton = this.FindControl<Button>("RequestsButton");
             requestsButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
             requestsButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
 
-            // Меняем контент на представление всех заявок
+            // Метод класса для смены представления на «Все заявки»
             MainContent.Content = new AllRequestsView();
         }
 
         private void Stats_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            // Сбрасываем стили всех кнопок
+            // Сброс стилей всех кнопок
             ResetButtonStyles();
 
-            // Устанавливаем стиль для активной кнопки
+            // Установка стиля для активной кнопки
             var statsButton = this.FindControl<Button>("StatsButton");
             statsButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
             statsButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
 
-            // Меняем контент на представление статистики
+            // Метод класса для смены представления на «Статистика»
             MainContent.Content = new StatisticsView();
         }
 
         private void Test_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            // Сбрасываем стили всех кнопок
+            // Сброс стилей всех кнопок
             ResetButtonStyles();
 
-            // Устанавливаем стиль для активной кнопки
+            // Установка стиля для активной кнопки
             var testButton = this.FindControl<Button>("TestButton");
             testButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
             testButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
 
-            // Меняем контент на представление статистики
+            // Метод класса для смены представления на «Тестовая статистика»
             MainContent.Content = new TestView();
         }
 
         private void Test_Click2(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            // Сбрасываем стили всех кнопок
+            // Сброс стилей всех кнопок
             ResetButtonStyles();
 
-            // Устанавливаем стиль для активной кнопки
+            // Установка стиля для активной кнопки
             var testButton = this.FindControl<Button>("TestButton2");
             testButton.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E53935"));
             testButton.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("White"));
 
-            // Меняем контент на представление статистики
+            // Метод класса для смены представления на «Тестовая статистика»
             //MainContent.Content = new TestViewModel();
         }
 
         private void ResetButtonStyles()
         {
+            // Получение ссылок на все основные кнопки навигации
             var registrationButton = this.FindControl<Button>("RegistrationButton");
             var requestsButton = this.FindControl<Button>("RequestsButton");
             var statsButton = this.FindControl<Button>("StatsButton");
