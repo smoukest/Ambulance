@@ -53,19 +53,19 @@ public partial class StatisticsView : UserControl
                         page.PageColor(Colors.White);
                         page.DefaultTextStyle(x => x.FontSize(12).FontFamily(Fonts.Arial));
 
-                        page.Header().Text("Отчёт по статистике скорой помощи")
+                        page.Header().Text("Ambulance Statistics Report")
                             .SemiBold().FontSize(24).FontColor(Colors.Blue.Darken2);
 
                         page.Content().PaddingVertical(1, Unit.Centimetre).Column(col =>
                         {
-                            col.Item().Text($"Дата формирования: {DateTime.Now:dd.MM.yyyy HH:mm}");
+                            col.Item().Text($"Date generated: {DateTime.Now:dd.MM.yyyy HH:mm}");
                             col.Item().PaddingTop(20);
 
-                            col.Item().Text("Общие показатели:").SemiBold().FontSize(18);
-                            col.Item().Text($"- Всего вызовов: {vm.TotalCalls}");
-                            col.Item().Text($"- Завершено сегодня: {vm.CompletedToday}");
-                            col.Item().Text($"- В работе: {vm.InProgress}");
-                            col.Item().Text($"- Экстренные вызовы: {vm.CriticalCalls}");
+                            col.Item().Text("General Metrics:").SemiBold().FontSize(18);
+                            col.Item().Text($"- Total calls: {vm.TotalCalls}");
+                            col.Item().Text($"- Completed today: {vm.CompletedToday}");
+                            col.Item().Text($"- In progress: {vm.InProgress}");
+                            col.Item().Text($"- Critical calls: {vm.CriticalCalls}");
 
                             // NOTE: Charts can also be rendered as tables of data in PDF.
                             // Image generation from UI for QuestPDF requires additional tools (e.g. Avalonia RenderTargetBitmap logic)
@@ -76,7 +76,7 @@ public partial class StatisticsView : UserControl
                             .AlignCenter()
                             .Text(x =>
                             {
-                                x.Span("Страница ");
+                                x.Span("Page ");
                                 x.CurrentPageNumber();
                             });
                     });

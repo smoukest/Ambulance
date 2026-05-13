@@ -294,6 +294,7 @@ namespace Ambulance.ViewModels
                 if (patients == null || patients.Length == 0)
                 {
                     System.Diagnostics.Debug.WriteLine("Массив пуст или null");
+                    IsLoading = false;
                     return;
                 }
 
